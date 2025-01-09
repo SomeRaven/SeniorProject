@@ -14,7 +14,6 @@
 </br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; They will then be issued a card like one would get from the library with the child's name in big letters, any medical information, and a barcode or QR code that is specific to that child. This is what the parent will use to check their child in or out every class period and it will also serve as the child's name tag. Parents or older children will just scan their card at the front desk and head to their class. This card will also be able to be scanned by staff on their phones to pull up all of the necessary information such as the parent's phone number or email, what class/classes that child is taking at the moment, etc. This will reduce time taken to find information from an Excel sheet on a computer or from a printed-out version of that sheet. 
 
 ### Technical Overview
-<<<<<<< HEAD
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I will be programming with the framework Express for the server side and utilizing sqlite for the database with python as the backend as I want more exposere to frontend more than backend. I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use React Native for the iOS app. React Native is different than what we used in iOS App Development for the iOS app. Testing of the web app will be done with a MacBook Pro the STEM Center is providing. I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200, so I have an introduction to Express but not enough for what I need. 
 
 ### Milestone List
@@ -58,7 +57,6 @@
 
 ### Validation Plan
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As stated in the Technical Overview and the Milestone List I will be testing throughout the semester to get any feedback and issues that might come up. We will only test it out with a few parents and the administration's children. After I get a working component I am hoping to set it up at the center for my director and bosses to start trying to use. Once feedback is received I will either note it for future development or fix it asap. For the iOS development testing I will make multiple cards with different codes on them, and scan them with my personal phone. Then, I have my staff test with their iOS phones while they are teaching that semester.
-=======
 I will be programming with the framework express for the server side and I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use react native which is different then what we used in iOS App Development for the iOS app that will used for the second part of the solution. Testing of the web app will be done with a laptop the STEM Center is providing which is a macbook pro (need to look at the year and if it is intel or not). I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200 so I have an inrtoduction to express but not enough for what I want for this project. 
 
 ### Milestone List
@@ -102,4 +100,3 @@ I will be programming with the framework express for the server side and I need 
 ### Vaildation Plan
 As stated ing the Technical Overview and the Milestone List I will will be testing throughout with the STEM Center to get any feedback and issues that might come up. We will probably only test it out with a few parents and the admins children before we role it out to all of the students parents to use. </br> after I get a working compoint I am hoping to set it up at the center for my director and bosses to start trying to use as I wont be the only one using it. Once feedback is reseved I will either note it for future development or fix asap. 
 </br> For the iOS development testing I will test making mulitiple cards with different codes on them and testing them with my personal phone and then having my staff with iOS phones test while they are teaching that semester. 
->>>>>>> ae5b714 (First Draft of Project Proposal Done)
