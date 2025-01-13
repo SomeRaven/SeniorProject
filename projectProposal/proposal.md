@@ -1,30 +1,20 @@
 # Project Proposal
 
 ### Problem Description 
-STEM Center problem with checking in and checking out students.
-</br>
-STEM Center problem with collecting data due to reasons: 
-- Staff not taking accurate roll (not taking roll every day, missing students due to students coming in late or roll being taken later when it wasn't taken when class happened, etc.)
-- Pulling data from old ways of collecting data and or keeping data (using Excel and Word docs).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;While working at the Utah Tech STEM Outreach Center I have identified multiple problems. The first I found is a struggle checking students in and out. When the STEM Center had a check-in/check-out system in the past, there would be a line that would form due to parents having to check in their child/children every class period, creating annoyance with parents and lost time in class. 
 
-STEM Center having an issue when needing to access student information (parent phone number, parent email, what class the student is in).
-</br>
-STEM Center not keeping valuable information and or data to help with getting grants and or funding. 
-</br>
-STEM Center not being able to manage student information with relative ease (inputting student data into a spreadsheet every semester).
-</br>
-STEM Center has to input students that have been taking classes from them for multiple semesters every semester. 
-</br>
-When the STEM Center had a check-in/check-out system in the past, there would be a line that would form due to parents having to check in their child/children every class period, creating annoyance with parents and lost time in class. 
+</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The second problem has to do with collecting data. Their staff has been having difficulty taking accurate roll. There are issues with pulling data from old ways of collecting data and or keeping data (using Excel and Word docs). STEM Center not keeping valuable information and or data to help with getting grants and or funding. STEM Center has to input students that have been taking classes from them for multiple semesters every semester. STEM Center not being able to manage student information with relative ease (inputting student data into a spreadsheet every semester).
+
+</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The STEM Centers staff gets bogged down when trying to access student information for example parent phone number, parent email, what class the student is in. The staff has limited access to the students information, so they have to talk to a manager to get necessary information.
 </br>
 
 ### Proposed Solution 
-Create a web-based application that manages student information. This application will also be able to export data for grant writing purposes. (Director wants to pull gender of students going back 5 years. System will give a CSV of all students that attended classes going back five years without repeating students.) Parents will be able to register their child with an account that will be linked to them for every class they take. They will input their child's Name, Age, Grade, Birth date, any health concerns and or allergies, and preferred pronouns as well as the parent's Name, Phone Number, and Email. They will be able to add multiple parent or adult contact information. They will then be issued a card like one would get from the library with the child's name in big letters, any medical information, and a barcode or QR code that is specific to that child. This is what the parent will use to check their child in or out every class period and it will also serve as the child's name tag. Parents or older children will just scan their card at the front desk and head to their class. Done. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a web-based application that manages student information. This application will also be able to export data for grant writing purposes. (Director wants to pull gender of students going back 5 years. System will give a CSV of all students that attended classes going back five years without repeating students.) Parents will be able to register their child with an account that will be linked to them for every class they take. They will input their child's Name, Age, Grade, Birth date, any health concerns and or allergies, and preferred pronouns as well as the parent's Name, Phone Number, and Email. They will be able to add multiple parent or adult contact information. 
 
-This card will also be able to be scanned by staff on their phones to pull up all of the necessary information such as the parent's phone number or email, what class/classes that child is taking at the moment, etc. This will reduce time taken to find information from an Excel sheet on a computer or from a printed-out version of that sheet. 
+</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; They will then be issued a card like one would get from the library with the child's name in big letters, any medical information, and a barcode or QR code that is specific to that child. This is what the parent will use to check their child in or out every class period and it will also serve as the child's name tag. Parents or older children will just scan their card at the front desk and head to their class. This card will also be able to be scanned by staff on their phones to pull up all of the necessary information such as the parent's phone number or email, what class/classes that child is taking at the moment, etc. This will reduce time taken to find information from an Excel sheet on a computer or from a printed-out version of that sheet. 
 
 ### Technical Overview
-I will be programming with the framework Express for the server side and I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use React Native which is different than what we used in iOS App Development for the iOS app that will be used for the second part of the solution. Testing of the web app will be done with a laptop the STEM Center is providing which is a MacBook Pro (need to look at the year and if it is Intel or not). I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200 so I have an introduction to Express but not enough for what I want for this project. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I will be programming with the framework Express for the server side. I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use React Native for the iOS app. React Native is different than what we used in iOS App Development for the iOS app. Testing of the web app will be done with a MacBook Pro the STEM Center is providing. I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200, so I have an introduction to Express but not enough for what I need. 
 
 ### Milestone List
 **Week One**:
@@ -65,5 +55,4 @@ I will be programming with the framework Express for the server side and I need 
  Updating LinkedIn and GitHub to show something other than high school Kyleigh's web internship. 
 
 ### Validation Plan
-As stated in the Technical Overview and the Milestone List, I will be testing throughout with the STEM Center to get any feedback and issues that might come up. We will probably only test it out with a few parents and the admin's children before we roll it out to all of the students' parents to use. </br> After I get a working component I am hoping to set it up at the center for my director and bosses to start trying to use as I won't be the only one using it. Once feedback is received I will either note it for future development or fix it asap. 
-</br> For the iOS development testing, I will test making multiple cards with different codes on them and testing them with my personal phone and then having my staff with iOS phones test while they are teaching that semester.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As stated in the Technical Overview and the Milestone List I will be testing throughout the semester to get any feedback and issues that might come up. We will only test it out with a few parents and the administration's children. After I get a working component I am hoping to set it up at the center for my director and bosses to start trying to use. Once feedback is received I will either note it for future development or fix it asap. For the iOS development testing I will make multiple cards with different codes on them, and scan them with my personal phone. Then, I have my staff test with their iOS phones while they are teaching that semester.
