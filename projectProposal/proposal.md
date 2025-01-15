@@ -14,23 +14,24 @@
 </br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; They will then be issued a card like one would get from the library with the child's name in big letters, any medical information, and a barcode or QR code that is specific to that child. This is what the parent will use to check their child in or out every class period and it will also serve as the child's name tag. Parents or older children will just scan their card at the front desk and head to their class. This card will also be able to be scanned by staff on their phones to pull up all of the necessary information such as the parent's phone number or email, what class/classes that child is taking at the moment, etc. This will reduce time taken to find information from an Excel sheet on a computer or from a printed-out version of that sheet. 
 
 ### Technical Overview
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I will be programming with the framework Express for the server side. I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use React Native for the iOS app. React Native is different than what we used in iOS App Development for the iOS app. Testing of the web app will be done with a MacBook Pro the STEM Center is providing. I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200, so I have an introduction to Express but not enough for what I need. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I will be programming with the framework Express for the server side and utilizing sqlite for the database with python as the backend as I want more exposere to frontend more than backend. I need to research how to create an API that can be used for the web app and the iOS app. I will be learning a new framework for the frontend of the web app. I want to use React Native for the iOS app. React Native is different than what we used in iOS App Development for the iOS app. Testing of the web app will be done with a MacBook Pro the STEM Center is providing. I will be using my personal iPhone for the testing of the iOS app. I am currently taking SE 4200, so I have an introduction to Express but not enough for what I need. 
 
 ### Milestone List
+<small>*Table of self imposed due dates below weeks*</small></br></br>
 **Week One**:
  Finish project proposal and start to make presentation
 </br></br>**Week Two**:
- Start learning how to create an API that can be used between both iOS and web apps
+ Start learning how to create an API that can be used between both iOS and web app. 
 </br></br>**Week Three**:
- Finish creating API and start creating the server side of the web app and iOS app
+ Finish creating API (Wednesday, January 22nd) and start creating the server side of the web app and iOS app
 </br></br>**Week Four**:
-*(Progress Checkpoint 1)* Clean up server side and start researching front end frameworks
+*(Progress Checkpoint 1)* Clean up server side (Wednesday, January 29th) and start researching front end frameworks
 </br></br>**Week Five**:
- Learn how to create account login and have an admin login 
+ Learn how to create account login and have an admin login (Thursday, February 6th)
 </br></br>**Week Six**:
-*(Progress Checkpoint 2)* Create minimal interface to test login and admin login before moving on and after login and admin is solid start working on user dashboard components (Add child (needs to have a QR code gen with it), edit information, etc.) create barcode / QR code scanner script to start sending roll data to server and test that
+*(Progress Checkpoint 2)* Create minimal interface to test login and admin login before moving on and after login and admin is solid start working on user dashboard components (Add child (needs to have a QR code gen with it), edit information, etc.) create barcode / QR code scanner script to start sending roll data to server and test that (Thursday, February 13th) 
 </br></br>**Week Seven**:
- Continue working on user dashboard and start working on admin dashboard (pull data, see all students, order by class or grade, add students into class etc.) start to test
+ Continue working on user dashboard and start working on admin dashboard (pull data, see all students, order by class or grade, add students into class etc.) start to test (Admin dashboard due on Thursday, February 27th)
 </br></br>**Week Eight**:
 *(Progress Checkpoint 3)* Week to catch up and clean up web app and test 
 </br></br>**Week Nine**:
@@ -42,15 +43,15 @@
 </br></br>**Week Twelve**:
  Start to implement features in app such as list of students, maybe having the ability to sort the students into classes and or grades
 </br></br>**Week Thirteen**:
-*(Progress Checkpoint 5)* Finish up displaying data and start to research how to do QR code scanning and pulling up students linked to QR code.
+*(Progress Checkpoint 5)* Finish up displaying data (Thursday, April 3rd) and start to research how to do QR code scanning and pulling up students linked to QR code.
 </br></br>**Week Fourteen**:
- I fear this will also be quite the learning curve so another week to learn how to get QR code scanning to work. Start to create project completion presentation
+ I fear this will also be quite the learning curve so another week to learn how to get QR code scanning to work. (Due Thursday, April 10th at the latest) Start (Monday, April 7th start ) to create project completion presentation
 </br></br>**Week Fifteen**:
-*(Project Completion Presentation)* Week to clean up everything last minute fixes and changes. Start Project Defense
+*(Project Completion Presentation)* Week to clean up everything last minute fixes and changes. Start Project Defense (Due Thursday, April 24th)
 </br></br>**Week Sixteen**:
 *(Project Defense)* Computing showcase, and Project defense. 
 </br></br>**Week Seventeen**:
-*(Portfolio)* Final updates to portfolio done. 
+*(Portfolio)* Final updates to portfolio done. (Due Finals day)
 </br></br>**Throughout project**:
  Updating LinkedIn and GitHub to show something other than high school Kyleigh's web internship. 
 
