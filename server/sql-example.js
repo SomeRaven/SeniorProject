@@ -72,6 +72,37 @@ app.post('/students', (req, res) => {
   });
 });
 
+// Route to update a student
+app.put('/students/:id', (req, res) => {
+  const { id } = req.params;
+  const { s_name, s_birthdate, s_class, s_medical } = req.body;
+  const sql = 'UPDATE students SET s_name = ?, s_birthdate = ?, s_class = ?, s_medical = ? WHERE id = ?';
+  const params = [s_name, s_birthdate, s_class, s_medical, id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ changes: this.changes });
+    }
+  });
+});
+// Route to delete a student
+app.delete('/students/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM students WHERE id = ?';
+  const params = [id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ deleted: this.changes });
+    }
+  });
+});
+
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

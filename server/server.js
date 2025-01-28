@@ -123,6 +123,7 @@ app.post('/students', (req, res) => {
   });
 });
 
+
 // Route to add a new parent
 app.post('/parents', (req, res) => {
   const { p_name, p_email } = req.body;
@@ -167,6 +168,97 @@ app.post('/classes', (req, res) => {
         name,
         grade_range,
       });
+    }
+  });
+});
+
+app.put('/students/:id', (req, res) => {
+  const { id } = req.params;
+  const { s_name, s_birthdate, class_id, parent_id, s_medical } = req.body;
+  const sql = `
+    UPDATE students 
+    SET s_name = ?, s_birthdate = ?, class_id = ?, parent_id = ?, s_medical = ? 
+    WHERE id = ?
+  `;
+  const params = [s_name, s_birthdate, class_id, parent_id, s_medical, id]; 
+  
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ changes: this.changes });
+    }
+  });
+});
+
+app.put('/parents/:id', (req, res) => { 
+  const { id } = req.params;
+  const { p_name, p_email } = req.body;
+  const sql = 'UPDATE parents SET p_name = ?, p_email = ? WHERE id = ?';
+  const params = [p_name, p_email, id]; 
+  
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ changes: this.changes });
+    }
+  });
+});
+
+app.put('/classes/:id', (req, res) => { 
+  const { id } = req.params;
+  const { name, grade_range } = req.body;
+  const sql = 'UPDATE classes SET name = ?, grade_range = ? WHERE id = ?';
+  const params = [name, grade_range, id]; 
+  
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ changes: this.changes });
+    }
+  });
+});
+
+app.delete('/students/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM students WHERE id = ?';
+  const params = [id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ deleted: this.changes });
+    }
+  });
+});
+
+app.delete('/parents/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM parents WHERE id = ?';
+  const params = [id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ deleted: this.changes });
+    }
+  });
+});
+
+app.delete('/classes/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM classes WHERE id = ?';
+  const params = [id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ deleted: this.changes });
     }
   });
 });
