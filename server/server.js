@@ -55,8 +55,8 @@ db.run(`
     class_id INTEGER NOT NULL,
     parent_id INTEGER NOT NULL,
     s_medical TEXT NOT NULL,
-    FOREIGN KEY (parent_id) REFERENCES parents(id) ON DELETE CASCADE,
-    FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
+    FOREIGN KEY (parent_id) REFERENCES parents(id),
+    FOREIGN KEY (class_id) REFERENCES classes(id)
   )
 `, (err) => {
   if (err) {
