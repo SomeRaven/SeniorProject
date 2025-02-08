@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
@@ -7,6 +8,7 @@ const PORT = 8080;
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(cors());
 
 // Create or connect to SQLite database
 const dbPath = path.join(__dirname, 'database.sqlite');
@@ -49,7 +51,7 @@ db.run(`
 
 db.run(`
   CREATE TABLE IF NOT EXISTS students (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
     s_name TEXT NOT NULL,
     s_birthdate TEXT NOT NULL,
     class_id INTEGER NOT NULL,
@@ -66,6 +68,22 @@ db.run(`
   }
 });
 
+db.run(`
+  CREATE TABLE IF NOT EXISTS checkin (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    student_id TEXT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(id)
+  )
+`, (err) => {
+  if (err) {
+    console.error('Error creating checkin table:', err.message);
+  } else {
+    console.log('Checkin table is ready.');
+  }
+});
+
 // Routes
 app.get('/', (req, res) => {
   res.send('Welcome to the SQLite + Express server!');
@@ -74,6 +92,17 @@ app.get('/', (req, res) => {
 // Route to get all students
 app.get('/students', (req, res) => {
   db.all('SELECT * FROM students', [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json(rows);
+    }
+  });
+});
+
+// Route to get all check-ins
+app.get('/check-in', (req, res) => {
+  db.all('SELECT * FROM checkin', [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
@@ -101,28 +130,90 @@ app.post('/students', (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const sql = `
-    INSERT INTO students (s_name, s_birthdate, class_id, parent_id, s_medical) 
-    VALUES (?, ?, ?, ?, ?)
-  `;
-  const params = [s_name, s_birthdate, class_id, parent_id, s_medical];
-
-  db.run(sql, params, function (err) {
+  // Generate student ID with leading zeros
+  db.get('SELECT COUNT(*) AS count FROM students', [], (err, row) => {
     if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      res.status(201).json({
-        id: this.lastID,
-        s_name,
-        s_birthdate,
-        class_id,
-        parent_id,
-        s_medical,
-      });
+      return res.status(500).json({ error: err.message });
     }
+
+    const studentCount = row.count + 1;
+    const student_id = studentCount.toString().padStart(4, '0');
+
+    const sql = `
+      INSERT INTO students (id, s_name, s_birthdate, class_id, parent_id, s_medical) 
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const params = [student_id, s_name, s_birthdate, class_id, parent_id, s_medical];
+
+    db.run(sql, params, function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.status(201).json({
+          id: student_id,
+          s_name,
+          s_birthdate,
+          class_id,
+          parent_id,
+          s_medical,
+        });
+      }
+    });
   });
 });
 
+// Route to add a new check-in
+app.post('/check-in', (req, res) => {
+  const { time, date, student_id } = req.body;
+
+  console.log('Received data:', { time, date, student_id });
+
+  if (!time || !date || !student_id) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  // Check if the student ID exists
+  db.get('SELECT * FROM students WHERE id = ?', [student_id], (err, student) => {
+    if (err) {
+      console.error('Error checking student ID:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student ID not found' });
+    }
+
+    const sql = `
+      INSERT INTO checkin (time, date, student_id) 
+      VALUES (?, ?, ?)
+    `;
+    const params = [time, date, student_id];
+
+    db.run(sql, params, function (err) {
+      if (err) {
+        console.error('Error inserting check-in:', err.message);
+        res.status(500).json({ error: err.message });
+      } else {
+        const checkinId = this.lastID;
+        const joinSql = `
+          SELECT checkin.id, checkin.time, checkin.date, students.s_name, students.id AS student_id
+          FROM checkin 
+          JOIN students ON checkin.student_id = students.id 
+          WHERE checkin.id = ?
+        `;
+        db.get(joinSql, [checkinId], (err, row) => {
+          if (err) {
+            console.error('Error fetching check-in with student name:', err.message);
+            res.status(500).json({ error: err.message });
+          } else {
+            console.log('Inserted check-in with student name and ID:', row);
+            res.status(201).json(row);
+          }
+        });
+      }
+    });
+  });
+});
 
 // Route to add a new parent
 app.post('/parents', (req, res) => {
@@ -270,14 +361,27 @@ app.listen(PORT, () => {
 
 // Graceful shutdown
 process.on('SIGINT', () => {
-  console.log('Closing database connection.');
-  db.close((err) => {
+  console.log('Dropping tables and closing database connection.');
+
+  const dropTablesSql = `
+    DROP TABLE IF EXISTS checkin;
+    DROP TABLE IF EXISTS students;
+    DROP TABLE IF EXISTS classes;
+    DROP TABLE IF EXISTS parents;
+  `;
+
+  db.exec(dropTablesSql, (err) => {
     if (err) {
-      console.error('Error closing the database connection:', err.message);
+      console.error('Error dropping tables:', err.message);
+    } else {
+      console.log('Tables dropped successfully.');
     }
-    process.exit(0);
+
+    db.close((err) => {
+      if (err) {
+        console.error('Error closing the database connection:', err.message);
+      }
+      process.exit(0);
+    });
   });
 });
-
-
-// testing kadd

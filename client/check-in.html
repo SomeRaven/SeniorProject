@@ -18,12 +18,16 @@
             <img src="cowboy.png" id="logo" alt="Cowboy Logo">
             <h1 id="title" class="koho-medium">Kid Wrangler</h1>
         </div>
-        <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
+        <a href="help.html">
+            <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
+        </a>
     </div>
     <div id="main">
         <div id="left">
             <div id="user">
-                <img src="user.png" id="user-icon" alt="User Icon">
+                <a href="profile.html">
+                    <img src="user.png" id="user-icon" alt="User Icon">
+                </a>
                 <h2 id="user-name" class="koho-bold">Funny Cat</h2>
                 <h3 id="user-company" class="koho-light">STEM Center</h3>
                 <h3 id="user-title" class="koho-light"> Administrator</h3>
@@ -41,7 +45,7 @@
         </div>
         <div id="content">
             <div id="check-in">
-                <i class="fa-solid fa-circle-check fa-7x" style="color: #14e162; margin: 21px"></i>
+                <i id="checkmark-icon" class="fa-solid fa-circle-check fa-7x" style="color: #14e162; margin: 21px"></i>
                 <h2 style="margin: 1%;" class="koho-light">Date</h2>
                 <h2 style="margin: 1%;" class="koho-medium">Time</h2>
                 <h1 style="margin: 1%;" class="koho-medium">Student Number</h1>
@@ -49,8 +53,10 @@
                     <input type="text" id="student-number" placeholder="Enter Student Number" class="koho-semibold">
                     <button id="check-in-button" class="koho-semibold">Check In</button>
                 </div>
+                <div id="error-message" class="koho-semibold"></div>
             </div>
         </div>
     </div> 
+    <script src='app.js'></script>
 </body>
 </html>

@@ -135,9 +135,9 @@ body {
 #left {
     width: 290px;
     background: white;
-    padding: 20px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    padding-top: 20px;
 }
 
 #user {
@@ -164,20 +164,31 @@ body {
 #nav {
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 20px;
+    gap: 21px;
+    padding: 30px 20px 30px 20px;
     font-size: 27px;
     cursor: pointer;
     transition: background 0.3s;
-    border-bottom: black 1px solid;
+    border-bottom: 0;
     text-decoration: none;
     color: black;
+    position: relative;
+}
+
+.nav-item::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 60%; 
+    height: 1px; 
+    background-color: black; 
 }
 
 .nav-item:hover {
@@ -194,10 +205,8 @@ body {
 }
 
 .nav-item.current-page {
-    background: #F2D06C;  /* This keeps it highlighted */
-    border-radius: 5px;
+    background: #F2D06C;  
 }
-
 
 
 
@@ -257,4 +266,33 @@ body {
 
 #check-in-button:hover {
     background: rgb(1, 145, 66);
+}
+
+
+#error-message {
+    display: none;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.checkmark-animation {
+    animation: bounce 1.2s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-35px); /* First bounce */
+    }
+    50% {
+        transform: translateY(0); /* Return to original position */
+    }
+    70% {
+        transform: translateY(-35px); /* Second bounce */
+    }
+    90% {
+        transform: translateY(0); /* Final return to original position */
+    }
 }
