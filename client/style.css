@@ -167,7 +167,7 @@ body {
     gap: 15px;
 }
 
-#nav-item {
+.nav-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -176,12 +176,30 @@ body {
     cursor: pointer;
     transition: background 0.3s;
     border-bottom: black 1px solid;
+    text-decoration: none;
+    color: black;
 }
 
-#nav-item:hover {
+.nav-item:hover {
     background: rgb(230, 230, 230);
     border-radius: 5px;
 }
+
+.nav-item:active {
+    background: #F2D06C;
+}
+
+.nav-item:focus, .nav-item:visited {
+    outline: none;
+}
+
+.nav-item.current-page {
+    background: #F2D06C;  /* This keeps it highlighted */
+    border-radius: 5px;
+}
+
+
+
 
 /* Content Area */
 #content {

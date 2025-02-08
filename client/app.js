@@ -16,3 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDateTime();
     setInterval(updateDateTime, 1000); // Update every second
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const navLinks = document.querySelectorAll(".nav-item");
+
+    navLinks.forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add("current-page");
+        }
+    });
+});
