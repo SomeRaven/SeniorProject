@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#top-bar {
+    background-color: rgb(2, 147, 195);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+#logo {
+    width: 60px;
+    height: auto;
+}
+
+#title {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+#help-icon {
+    color: white;
+}
