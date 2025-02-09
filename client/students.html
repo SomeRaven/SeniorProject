@@ -15,8 +15,8 @@
 <body>
     <div id="top-bar"> 
         <div id="logo-title">
-            <img src="cowboy.png" id="logo" alt="Cowboy Logo">
-            <h1 id="title" class="koho-medium">Kid Wrangler</h1>
+            <a href="check-in.html"><img src="cowboy.png" id="logo" alt="Cowboy Logo"></a>
+            <a href="check-in.html"><h1 id="title" class="koho-medium">Kid Wrangler</h1></a>
         </div>
         <a href="help.html">
             <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
@@ -45,6 +45,48 @@
         </div>
         <div id="content">
             <div id="students">
+                <div id="sort-search-add">
+                    <div id="students-main-left">
+                        <h1 id="students-title" class="koho-bold">Students</h1>
+
+                    <div id="sort">
+                        <h2 class="koho-medium">Sort By:</h2>
+                        <select id="sort-select" class="koho-semibold">
+                            <option value="name">Name</option>
+                            <option value="grade">Grade</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </div>
+                    <div id="search">
+                        <input type="text" id="search-bar" placeholder="Search" class="koho-semibold">
+                        <button id="search-button" class="koho-semibold">Search</button>
+                    </div>
+                </div>
+                    <div id="students-main-right">
+                        <div id="export">
+                            <button id="export-button" class="koho-semibold">Export</button>
+                        </div>
+                        <div id="add">
+                            <button id="add-button" class="koho-semibold">Add Student</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="title-header">
+                <i class="fa-solid fa-circle-user fa-5x" style="color: white;"></i>
+                <h2 id="name-header" class="koho-semibold">Name</h2>                
+                <h2 id="grade-header" class="koho-semibold">Class</h2>
+                <h2 id="parent-header" class="koho-semibold">Parent Name</h2>
+                <h2 id="email-header" class="koho-semibold">Email</h2>
+                <h2 id="phone-header" class="koho-semibold">Phone</h2>
+            </div>
+            <div class="student-row">
+                <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
+                <h3 class="koho-light">John Doe</h3>
+                <h3 class="koho-light">Class 1</h3>
+                <h3 class="koho-light">Parent Parent</h3>
+                <h3 class="koho-light">email@example.com</h3>
+                <h3 class="koho-light">123-456-7890</h3>
             </div>
         </div>
     </div>

@@ -112,6 +112,9 @@ body {
     font-size: 2rem;
     font-weight: bold;
 }
+a {
+    text-decoration: none;
+}
 
 #help-icon {
     color: white;
@@ -193,7 +196,6 @@ body {
 
 .nav-item:hover {
     background: rgb(230, 230, 230);
-    border-radius: 5px;
 }
 
 .nav-item:active {
@@ -296,3 +298,122 @@ body {
         transform: translateY(0); /* Final return to original position */
     }
 }
+ /* Students Section */
+#students {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#sort-search-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#students-main-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#sort,
+#search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#sort-select,
+#search-bar {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#search-button {
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #2980b9;
+}
+
+#students-main-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+#export-button,
+#add-button {
+    padding: 12px 10px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#export-button:hover,
+#add-button:hover {
+    background-color: #27ae60;
+}
+
+/* Student List */
+#title-header, .student-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#title-header {
+    font-weight: bold;
+}
+
+.student-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 10px;
+}
+
+.student {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.student i {
+    font-size: 40px;
+    color: #7f8c8d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #student-list {
+        flex-direction: column;
+    }
+
+    .student {
+        flex-basis: 100%;
+    }
+}
+
+
+
+
+
+
+
+
