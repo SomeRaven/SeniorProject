@@ -729,3 +729,17 @@ p {
 .hidden {
     display: none;
 }
+#logout-button {
+    padding: 12px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #d9534f;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
