@@ -38,10 +38,10 @@
 ## Week Thirteen
 - (Progress Checkpoint 5) Finish up displaying data (Thursday, April 3rd) make data show up when qr code scanned
 ## Week Fourteen
-- Start testing ✨
+- ✨ Start testing ✨
 
 ## Week Fifteen
-- ✨ testing ✨ and ✨bug fixes✨
+- ✨ testing ✨ and ✨ bug fixes ✨
 
 ## Week Sixteen
 - (Progress Checkpoint 6) Finish testing the app and fix any bugs (Thursday, April 17th)

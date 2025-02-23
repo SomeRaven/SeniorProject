@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Help - Kid Wrangler</title>
+    <title>Export Data - Kid Wrangler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
@@ -44,35 +44,28 @@
                 </a>
             </div>
         </div>
-
-        <!-- Help Content -->
+        
+        <!-- Export Data Content -->
         <div id="content">
-            <div id="help-section">
-                <h1 class="koho-medium">Help & Support</h1>
+            <div id="export-section">
+                <h1 class="koho-medium">Export Student Data</h1>
+                
+                <p>Select the format you want to export the data in:</p>
 
-                <h2>Frequently Asked Questions</h2>
-
-                <div class="faq">
-                    <h3>How do I check in students?</h3>
-                    <p>Navigate to the "Check In" page and scan the student's barcode or manually enter their ID.</p>
+                <div class="export-options">
+                    <button onclick="exportData('csv')" class="export-btn">
+                        <i class="fa-solid fa-file-csv"></i> Export as CSV
+                    </button>
+                    <button onclick="exportData('json')" class="export-btn">
+                        <i class="fa-solid fa-file-code"></i> Export as JSON
+                    </button>
+                    <button onclick="exportData('pdf')" class="export-btn">
+                        <i class="fa-solid fa-file-pdf"></i> Export as PDF
+                    </button>
                 </div>
-
-                <div class="faq">
-                    <h3>Where can I view student records?</h3>
-                    <p>Click on "Students" in the left menu to access the student database.</p>
-                </div>
-
-                <h2>Contact Support</h2>
-                <ul>
-                    <li><i class="fa-solid fa-envelope"></i> support@kidwrangler.com</li>
-                    <li><i class="fa-solid fa-phone"></i> (123) 456-7890</li>
-                </ul>
-
-                <h2>Troubleshooting</h2>
-                <p>If you're experiencing issues, try refreshing the page or clearing your browser cache. If problems persist, contact support.</p>
             </div>
         </div>
     </div>
-    <script src='app.js'></script>
 </body>
+<script src="app.js"></script>
 </html>

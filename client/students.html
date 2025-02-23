@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Kid Wrangler</title>
+    <title>Student - Kid Wrangler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
@@ -52,23 +52,26 @@
                     <div id="sort">
                         <h2 class="koho-medium">Sort By:</h2>
                         <select id="sort-select" class="koho-semibold">
+                            <option value="id">Id</option>
                             <option value="name">Name</option>
-                            <option value="grade">Grade</option>
-                            <option value="status">Status</option>
+                            <option value="class">Class</option>
                         </select>
                     </div>
                     <div id="search">
                         <input type="text" id="search-bar" placeholder="Search" class="koho-semibold">
-                        <button id="search-button" class="koho-semibold">Search</button>
                     </div>
                 </div>
                     <div id="students-main-right">
-                        <div id="export">
-                            <button id="export-button" class="koho-semibold">Export</button>
-                        </div>
-                        <div id="add">
-                            <button id="add-button" class="koho-semibold">Add Student</button>
-                        </div>
+                        <a href="export.html">
+                            <div id="export">
+                                <button id="export-button" class="koho-semibold">Export</button>
+                            </div>
+                        </a>
+                        <a href="add-student.html">
+                            <div id="add">
+                                <button id="add-button" class="koho-semibold">Add Student</button>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -77,18 +80,14 @@
                 <h2 id="name-header" class="koho-semibold">ID</h2>                
                 <h2 id="name-header" class="koho-semibold">Name</h2>   
                 <h2 id="grade-header" class="koho-semibold">Class</h2>
-                <h2 id="parent-header" class="koho-semibold">Parent Name</h2>
+                <h2 id="parent-header" class="koho-semibold">Parent<br> Name</h2>
                 <h2 id="email-header" class="koho-semibold">Email</h2>
                 <h2 id="phone-header" class="koho-semibold">Phone</h2>
             </div>
-            <div class="student-row">
-                <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
-                <h3 class="koho-light">0001</h3>
-                <h3 class="koho-light">John Doe</h3>
-                <h3 class="koho-light">Class 1</h3>
-                <h3 class="koho-light">Parent Parent</h3>
-                <h3 class="koho-light">email@example.com</h3>
-                <h3 class="koho-light">123-456-7890</h3>
+            <div class="student-list">
+                <div class="student-row">
+                    <!-- Student rows will be appended here -->
+                </div>
             </div>
         </div>
     </div>

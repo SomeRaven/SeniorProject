@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
             errorElement.style.fontSize = "2rem";
             setTimeout(() => {
                 errorElement.style.display = "none";
-            }, 3000); 
+            }, 3000); // Error message display duration
         }
     }
 
@@ -89,91 +89,34 @@ document.addEventListener("DOMContentLoaded", function () {
         checkmark.classList.add("checkmark-animation");
         setTimeout(() => {
             checkmark.classList.remove("checkmark-animation");
-        }, 600); 
+        }, 600); // Duration of the animation (should match the CSS duration)
     }
 
     // Fetch and display students dynamically from server
-    let allStudents = []; 
-    let currentSort = "id"; 
-
     function fetchStudents() {
         fetch("http://localhost:8080/students")
             .then(response => response.json())
             .then(students => {
-                allStudents = students; 
-                sortAndDisplayStudents(); 
+                const studentContainer = document.getElementById("content");
+                students.forEach(student => {
+                    const studentRow = document.createElement("div");
+                    studentRow.classList.add("student-row");
+
+                    studentRow.innerHTML = `
+                        <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
+                        <h3 class="koho-light">${student.id}</h3>
+                        <h3 class="koho-light">${student.name}</h3>
+                        <h3 class="koho-light">${student.class}</h3>
+                        <h3 class="koho-light">${student.parent}</h3>
+                        <h3 class="koho-light">${student.email}</h3>
+                        <h3 class="koho-light">${student.phone}</h3>
+                    `;
+
+                    studentContainer.appendChild(studentRow);
+                });
             })
             .catch(error => console.error("Error fetching students:", error));
     }
 
-    function displayStudents(students) {
-        const studentContainer = document.querySelector(".student-list");
-        studentContainer.innerHTML = ""; 
-
-        students.forEach(student => {
-            const studentRow = document.createElement("div");
-            studentRow.classList.add("student-row");
-
-            const emailParts = student.parent_email.split("@");
-            const formattedEmail = `${emailParts[0]}<br>@${emailParts[1]}`;
-
-            studentRow.innerHTML = `
-                <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
-                <h3 class="koho-light">${student.id}</h3>
-                <h3 class="koho-light">${student.s_name}</h3>
-                <h3 class="koho-light">${student.class_name}</h3>
-                <h3 class="koho-light">${student.parent_name}</h3>
-                <h3 class="koho-light">${formattedEmail}</h3>
-                <h3 class="koho-light">${student.parent_phone}</h3>
-            `;
-
-            studentContainer.appendChild(studentRow);
-        });
-    }
-
-    // **Sorting Function**
-    function sortAndDisplayStudents() {
-        let sortedStudents = [...allStudents]; 
-        sortedStudents.sort((a, b) => {
-            if (currentSort === "id") {
-                return a.id.localeCompare(b.id);
-            } else if (currentSort === "name") {
-                return a.s_name.localeCompare(b.s_name); 
-            } else if (currentSort === "class") {
-                return a.class_name.localeCompare(b.class_name);
-            }
-            return 0;
-        });
-
-        displayStudents(sortedStudents);
-    }
-
-    // **Handle Sorting Changes**
-    document.getElementById("sort-select").addEventListener("change", function (event) {
-        currentSort = event.target.value;
-        sortAndDisplayStudents();
-    });
-
-    // **Search Function (Filters & Sorts Results)**
-    function searchStudents() {
-        const query = document.getElementById("search-bar").value.toLowerCase().trim();
-
-        const filteredStudents = allStudents.filter(student =>
-            student.s_name.toLowerCase().includes(query) ||
-            student.class_name.toLowerCase().includes(query) ||
-            student.parent_name.toLowerCase().includes(query) ||
-            student.parent_email.toLowerCase().includes(query) ||
-            student.parent_phone.includes(query)
-        );
-
-        displayStudents(filteredStudents);
-    }
-
-    // **Attach event listener for search**
-    document.getElementById("search-bar").addEventListener("input", searchStudents);
-
     fetchStudents();
-
 });
-
-
