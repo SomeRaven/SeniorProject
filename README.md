@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 This is a web application that manages students, classes, and check-ins using an Express.js backend with a SQLite database. Below is an overview of the components and functionality of the application:
 
 ### Overview
