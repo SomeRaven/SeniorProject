@@ -62,7 +62,7 @@ This app provides a simple yet effective way to manage students, classes, and tr
 Student management software for the STEM Outreach Center
 - [X] Check in check out
 - [X] display information about students
-- [ ] In depth data
+- [X] In depth data
 - [ ] Admin, Staff, Parent Profiles
 - [X] Student look up
 - [ ] Exporting data
@@ -70,5 +70,7 @@ Student management software for the STEM Outreach Center
       - [ ] "as the director, I want to pull gender data going back 5 years"
       - [ ] "as a staff member, I want to pull my class data"
       - [ ] "as an admin, I want to export check in data"
-- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
->>>>>>> 85939ac8ff0196398c08bea3dd45f8614e6988e2
+      - [ ] "as a really cool iPad, I want to be able to check students in" 
+- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.)
+- [x] Data Rebase
+- [x] Fix frontend to match data rebase
