@@ -22,36 +22,36 @@
         <div class="auth-container">
             <!-- LOGIN FORM -->
             <div class="auth-box" id="login-box">
-                <h1 id="login-title">Login</h1>
+                <h1 id="login-title" class="koho-bold">Login</h1>
                 <div class="input-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Enter your email">
+                    <label for="login-email" class="koho-bold">Email</label>
+                    <input type="email" id="login-email" class="koho-light" placeholder="Enter your email">
                 </div>
                 <div class="input-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" placeholder="Enter your password">
+                    <label for="login-password" class="koho-bold">Password</label>
+                    <input type="password" id="login-password" class="koho-light" placeholder="Enter your password">
                 </div>
-                <button class="auth-btn" onclick="handleLogin()">Login</button>
-                <p class="switch-auth">Don't have an account? <a href="#" onclick="toggleAuth('signup')">Sign up</a></p>
+                <button class="auth-btn koho-light" onclick="handleLogin()" class="koho-light">Login</button>
+                <p class="switch-auth koho-light">Don't have an account? <a href="#" onclick="toggleAuth('signup')">Sign up</a></p>
             </div>
 
             <!-- SIGNUP FORM -->
             <div class="auth-box hidden" id="signup-box">
-                <h1 id="login-title">Sign Up</h1>
+                <h1 id="login-title" class="koho-bold">Sign Up</h1>
                 <div class="input-group">
-                    <label for="signup-name">Full Name</label>
-                    <input type="text" id="signup-name" placeholder="Enter your full name">
+                    <label for="signup-name" class="koho-bold">Full Name</label>
+                    <input type="text" id="signup-name" class="koho-light" placeholder="Enter your full name">
                 </div>
                 <div class="input-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" placeholder="Enter your email">
+                    <label for="signup-email" class="koho-bold">Email</label>
+                    <input type="email" id="signup-email" class="koho-light" placeholder="Enter your email">
                 </div>
                 <div class="input-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" placeholder="Create a password">
+                    <label for="signup-password" class="koho-light">Password</label>
+                    <input type="password" id="signup-password" class="koho-light" placeholder="Create a password">
                 </div>
-                <button class="auth-btn" onclick="handleSignup()">Sign Up</button>
-                <p class="switch-auth">Already have an account? <a href="#" onclick="toggleAuth('login')">Login</a></p>
+                <button class="auth-btn koho-light" onclick="handleSignup()" >Sign Up</button>
+                <p class="switch-auth koho-light">Already have an account? <a href="#" onclick="toggleAuth('login')">Login</a></p>
             </div>
         </div>
     </div>

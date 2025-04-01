@@ -2,6 +2,7 @@
   "dependencies": {
     "canvas-confetti": "^1.9.3",
     "confetti": "^2.0.6",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "node": "^23.7.0",

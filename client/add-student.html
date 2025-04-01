@@ -19,7 +19,7 @@
             <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
         </div>
         <div id="logo-title">
-            <h2 id="logout-button" class="koho-light">Logout</h3>
+            <h2 id="logout-button" class="koho-light">Logout</h2>
             <a href="help.html">
                 <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
             </a>
@@ -44,6 +44,10 @@
                     <i class="fa-solid fa-user fa-2x"></i>
                     <h3 class="koho-light">Students</h3>
                 </a>
+                <a href="classes.html" class="nav-item">
+                    <i class="fa-solid fa-book fa-2x"></i>
+                    <h3 class="koho-light">Classes</h3>
+                </a>
             </div>
         </div>
         <div id="content">
@@ -52,17 +56,24 @@
                 <label for="s_name">Student Name:</label>
                 <input type="text" id="s_name" name="s_name" required>
 
-                <label for="class_name">Class Name:</label>
-                <input type="text" id="class_name" name="class_name" required>
+
+                <!-- Classes Dropdown -->
+                <label for="class_name">Classes:</label>
+                <select id="classes-dropdown" name="class(es)" class="classes-dropdown">
+                    <option value="---">---</option>
+                    <!-- Dynamic classes will be inserted here by JavaScript -->
+                </select>
+                <button id="add-another-class">Add Another Class</button>
+
 
                 <label for="p_name">Parent Name:</label>
                 <input type="text" id="parent_name" name="p_name" required>
             
                 <label for="p_email">Parent Email:</label>
-                <input type=text" id="parent_email" name="p_email" required>
+                <input type="text" id="parent_email" name="p_email" required>
                 
                 <label for="p_phone">Parent Phone:</label>
-                <input type=text" id="parent_phone" name="p_phone" required>
+                <input type="text" id="parent_phone" name="p_phone" required>
                 
                 <button type="submit">Add Student</button>
             </form>
