@@ -61,7 +61,7 @@ This app provides a simple yet effective way to manage students, classes, and tr
 Student management software for the STEM Outreach Center
 - [X] Check in check out
 - [X] display information about students
-- [ ] In depth data
+- [X] In depth data
 - [ ] Admin, Staff, Parent Profiles
 - [X] Student look up
 - [ ] Exporting data
