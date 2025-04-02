@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 This is a web application that manages students, classes, and check-ins using an Express.js backend with a SQLite database. Below is an overview of the components and functionality of the application:
 
 ### Overview
@@ -58,7 +57,6 @@ The database consists of the following tables:
 - Finalize student and class search/filtering logic.
 
 This app provides a simple yet effective way to manage students, classes, and track their attendance via check-ins, with a user-friendly interface and dynamic data interactions.
-=======
 # SeniorProject
 Student management software for the STEM Outreach Center
 - [X] Check in check out
@@ -72,4 +70,3 @@ Student management software for the STEM Outreach Center
       - [ ] "as a staff member, I want to pull my class data"
       - [ ] "as an admin, I want to export check in data"
 - [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
->>>>>>> 85939ac8ff0196398c08bea3dd45f8614e6988e2

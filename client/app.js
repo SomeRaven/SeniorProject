@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Function to update the date and time dynamically
     function updateDateTime() {
         const now = new Date();
         const dateElement = document.querySelector("#check-in h2:nth-of-type(1)");
@@ -14,9 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updateDateTime();
-    setInterval(updateDateTime, 1000); // Update every second
+    setInterval(updateDateTime, 1000); 
 
-    // Handle navigation link highlighting
     const navLinks = document.querySelectorAll(".nav-item");
     navLinks.forEach(link => {
         if (link.href === window.location.href) {
@@ -27,25 +25,32 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check-In function
     function checkIn() {
         const now = new Date();
+        const studentId = document.querySelector("#student-number").value;
+    
+        if (!studentId) {
+            showErrorMessage("Please enter a student ID.");
+            return;
+        }
+    
         const data = {
-            student_id: document.querySelector("#student-number").value,
+            student_id: studentId,
             date: now.toLocaleDateString(),
             time: now.toLocaleTimeString()
         };
-
+    
         console.log("The check-in data:", data);
-
+    
         fetch("http://localhost:8080/check-in", {
             method: "POST",
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" }
         })
         .then(response => {
-            if (!response.ok) throw new Error('Student ID not found');
+            if (!response.ok) return response.json().then(err => { throw new Error(err.error || "Check-in failed"); });
             return response.json();
         })
-        .then(data => {
-            console.log('Check-in successful:', data);
+        .then(responseData => {
+            console.log('Check-in successful:', responseData);
             showCheckmarkAnimation();
         })
         .catch(error => {
@@ -53,8 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
             showErrorMessage(error.message);
         });
     }
+    
 
-    // Display error message
     function showErrorMessage(message) {
         const errorElement = document.getElementById("error-message");
         if (errorElement) {
@@ -65,59 +70,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Add event listener for check-in button
     const checkInButton = document.getElementById("check-in-button");
     if (checkInButton) checkInButton.onclick = checkIn;
 
-    // Show checkmark animation on successful check-in
     function showCheckmarkAnimation() {
         const checkmark = document.getElementById("checkmark-icon");
         checkmark.classList.add("checkmark-animation");
         setTimeout(() => checkmark.classList.remove("checkmark-animation"), 600);
     }
 
-    function fetchClasses() {
-        fetch("http://localhost:8080/class-students")
-            .then(response => response.json())
-            .then(classes => {
-                const classContainer = document.getElementById("class-container");
-    
-                classContainer.innerHTML = classes.map(cls => {
-                    // Create a string of HTML for each student's information
-                    const studentRows = cls.students.map(student => {
-                        return `
-                            <div class="student-row">
-                                <p><strong>ID:</strong> ${student.id}</p>
-                                <p><strong>Name:</strong> ${student.name}</p>
-                                <p><strong>Parent Name:</strong> ${student.parent_name}</p>
-                                <p><strong>Parent Email:</strong> ${student.parent_email}</p>
-                                <p><strong>Parent Phone:</strong> ${student.parent_phone}</p>
-                            </div>
-                        `;
-                    }).join('');
-    
-                    return `
-                        <div class="class-item">
-                            <h2>${cls.class_name}</h2>
-                            <p><strong>Teacher:</strong> ${cls.teacher}</p>
-                            <p><strong>Location:</strong> ${cls.location}</p>
-                            <p><strong>Meeting Day:</strong> ${cls.meeting_day}</p>
-                            <p><strong>Time:</strong> ${cls.time}</p>
-                            <p><strong>Semester:</strong> ${cls.semester}</p>
-                            <h3>Students:</h3>
-                            ${studentRows}
-                        </div>
-                    `;
-                }).join('');
-    
-                classContainer.innerHTML = classContainer.innerHTML;
-            })
-            .catch(error => console.error("Error fetching classes:", error));
-    }
-    
     
 
-    // Fetch and display students dynamically
     let allStudents = [];
     let currentSort = "id";
 
@@ -134,10 +97,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function displayStudents(students) {
         const container = document.getElementById('student-row');
-        container.innerHTML = ""; // Clear previous content
+        container.innerHTML = ""; 
     
         students.forEach(student => {
-            // Ensure student.classes is an array before mapping
             const classNames = Array.isArray(student.classes) 
                 ? student.classes.map(cls => cls.class_name).join(', ') 
                 : "No classes assigned";
@@ -158,20 +120,18 @@ document.addEventListener("DOMContentLoaded", function () {
     function sortAndDisplayStudents() {
         let sortedStudents = [...allStudents];
         sortedStudents.sort((a, b) => {
-            if (currentSort === "all") return (a.id || "").localeCompare(b.id || "");
+            if (currentSort === "") return (a.id || "").localeCompare(b.id || "");
             if (currentSort === "class") return (a.class_name || "").localeCompare(b.class_name || "");
             return 0;
         });
         displayStudents(sortedStudents);
     }
 
-    // Handle sorting changes
     document.getElementById("sort-select").addEventListener("change", function (event) {
         currentSort = event.target.value;
         sortAndDisplayStudents();
     });
 
-    // Search Function
     function searchStudents() {
         const query = document.getElementById("search-bar").value.toLowerCase().trim();
         const filteredStudents = allStudents.filter(student =>
@@ -188,5 +148,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initial Data Fetch
     fetchStudents();
-    fetchClasses();
 });

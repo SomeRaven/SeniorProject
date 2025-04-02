@@ -69,11 +69,13 @@ db.run(`
 
   db.run(`
     CREATE TABLE IF NOT EXISTS checkin (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
-      time TEXT NOT NULL,
-      student_id TEXT NOT NULL,
-      FOREIGN KEY (student_id) REFERENCES students(id)
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL,
+        time TEXT NOT NULL,
+        student_id TEXT NOT NULL,
+        class_id INTEGER NOT NULL,  -- NEW COLUMN to track which class the check-in belongs to
+        FOREIGN KEY (student_id) REFERENCES students(id),
+        FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
     );
   `, (err) => {
     if (err) {
@@ -335,6 +337,7 @@ app.post('/check-in', (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  // Check if student exists
   db.get('SELECT * FROM students WHERE id = ?', [student_id], (err, student) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -343,18 +346,50 @@ app.post('/check-in', (req, res) => {
       return res.status(404).json({ error: 'Student ID not found' });
     }
 
-    const sql = 'INSERT INTO checkin (time, date, student_id) VALUES (?, ?, ?)';
-    const params = [time, date, student_id];
-
-    db.run(sql, params, function (err) {
+    // Find the student's classes that meet today
+    const currentDay = new Date().toLocaleString('en-US', { weekday: 'long' }); // e.g., "Monday"
+    db.all(`
+      SELECT c.id AS class_id 
+      FROM class_students cs
+      JOIN classes c ON cs.class_id = c.id
+      WHERE cs.student_id = ? AND c.meeting_day = ?
+    `, [student_id, currentDay], (err, classes) => {
       if (err) {
-        res.status(500).json({ error: err.message });
-      } else {
-        res.status(201).json({ id: this.lastID, time, date, student_id });
+        return res.status(500).json({ error: err.message });
       }
+      if (!classes.length) {
+        return res.status(404).json({ error: 'No class scheduled for today' });
+      }
+
+      // Insert check-in records for each class
+      const insertCheckIn = (class_id, callback) => {
+        db.run(
+          'INSERT INTO checkin (time, date, student_id, class_id) VALUES (?, ?, ?, ?)',
+          [time, date, student_id, class_id],
+          callback
+        );
+      };
+
+      let completed = 0;
+      let errors = [];
+
+      classes.forEach(({ class_id }) => {
+        insertCheckIn(class_id, (err) => {
+          if (err) errors.push(err.message);
+          completed++;
+          if (completed === classes.length) {
+            if (errors.length) {
+              res.status(500).json({ error: errors });
+            } else {
+              res.status(201).json({ message: 'Check-in successful for all classes', checkedInClasses: classes });
+            }
+          }
+        });
+      });
     });
   });
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

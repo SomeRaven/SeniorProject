@@ -354,7 +354,7 @@ a {
     gap: 20px;
 }
 #export-button,
-#add-button {
+#add-button, #class-add-button {
     padding: 10px 10px;
     background-color: #29a55d;
     color: white;
@@ -464,7 +464,7 @@ a {
 }
 
 /* Add Student Form */
-#add-student-form {
+#add-student-form, #add-class-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -481,8 +481,20 @@ a {
     font-weight: 500;
     color: #333;
 }
+#add-class-form label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+}
 
 #add-student-form input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s ease;
+}
+#add-class-form input {
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -494,6 +506,12 @@ a {
     border-color: #0293c3;
     outline: none;
 }
+
+#add-class-form input:focus {
+    border-color: #0293c3;
+    outline: none;
+}
+
 
 #add-student-form button {
     padding: 12px;
@@ -507,7 +525,23 @@ a {
     transition: background 0.3s;
 }
 
+#add-class-form button {
+    padding: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: #0293c3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
 #add-student-form button:hover {
+    background: #027aa3;
+}
+
+#add-class-form button:hover {
     background: #027aa3;
 }
 
@@ -859,7 +893,7 @@ select:hover {
     gap: 10px;
 }
 
-#search-bar {
+#search-bar, #class-search-bar {
     padding: 6px 10px;
     width: 300px;
     font-size: 16px;
