@@ -369,7 +369,7 @@ a {
 }
 
 /* Student List */
-#title-header, #student-row {
+#title-header, .student-column {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr .5fr;
     align-items: center;

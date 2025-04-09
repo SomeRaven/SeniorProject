@@ -105,21 +105,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 : "No classes assigned";
     
             container.innerHTML += `
-                <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
-                <h3 class="koho-light student-id">${student.student_id}</h3>
-                <h3 class="koho-light student-name">${student.s_name}</h3>
-                <h3 class="koho-light student-class">${classNames}</h3>
-                <h3 class="koho-light parent-name">${student.parent_name}</h3>
-                <h3 class="koho-light parent-email">${student.parent_email.replace('@', '</br>@')}</h3>
-                <h3 class="koho-light parent-phone">${student.parent_phone.replace(/^(\d{3})/, '$1</br>')}</h3>
-                <button class="koho-light edit-button" data-student-id="${student.student_id}">Edit</button>
-            `;
+                <div class="student-column">
+                    <i class="fa-solid fa-circle-user fa-5x" style="color: #d8dadf;"></i>
+                    <h3 class="koho-light student-id">${student.student_id}</h3>
+                    <h3 class="koho-light student-name">${student.s_name}</h3>
+                    <h3 class="koho-light student-class">${classNames}</h3>
+                    <h3 class="koho-light parent-name">${student.parent_name}</h3>
+                    <h3 class="koho-light parent-email">${student.parent_email.replace('@', '</br>@')}</h3>
+                    <h3 class="koho-light parent-phone">${student.parent_phone.replace(/^(\d{3})/, '$1</br>')}</h3>
+                    <button class="koho-light edit-button" data-student-id="${student.student_id}">Edit</button>
+                </div>
+                `;
         });
     
         document.querySelectorAll(".edit-button").forEach(button => {
             button.onclick = function () {
                 const studentId = this.dataset.studentId;
                 console.log("Clicked edit for:", studentId);
+                console.log("Parent element:", this.parentElement);
+                console.log("Student data:", allStudents.find(s => s.student_id === studentId));
                 editStudent(studentId);
             };
         });
@@ -128,47 +132,75 @@ document.addEventListener("DOMContentLoaded", function () {
     function editStudent(studentId) {
         const student = allStudents.find(s => s.student_id === studentId);
         if (!student) return;
-        const classNames = Array.isArray(student.classes) 
-                ? student.classes.map(cls => cls.class_name).join(', ') 
-                : "No classes assigned";
     
-                
-        // Find the student's DOM elements
+        // Find the student's DOM elements using studentId
         const parent = document.querySelector(`button[data-student-id="${studentId}"]`).parentElement;
         const nameElement = parent.querySelector('.student-name');
-        const classElement = parent.querySelector('.student-class');
         const parentNameElement = parent.querySelector('.parent-name');
-        
-        // Create input fields for editing
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.value = student.s_name;
-        nameInput.className = 'edit-input';
+        const emailElement = parent.querySelector('.parent-email');
+        const phoneElement = parent.querySelector('.parent-phone');
+        const editButton = parent.querySelector(`button[data-student-id="${studentId}"]`);
     
-        const classInput = document.createElement('input');
-        classInput.type = 'text';
-        classInput.value = classNames;
-        classInput.className = 'edit-input';
+        // Check if the button is in "Edit" mode or "Submit" mode
+        if (editButton.textContent === "Edit") {
+            // Create input fields for editing
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = student.s_name;
+            nameInput.className = 'edit-input';
     
-        const parentNameInput = document.createElement('input');
-        parentNameInput.type = 'text';
-        parentNameInput.value = student.parent_name;
-        parentNameInput.className = 'edit-input';
+            const parentNameInput = document.createElement('input');
+            parentNameInput.type = 'text';
+            parentNameInput.value = student.parent_name;
+            parentNameInput.className = 'edit-input';
     
-        nameElement.replaceWith(nameInput);
-        classElement.replaceWith(classInput);
-        parentNameElement.replaceWith(parentNameInput);
+            const parentEmailInput = document.createElement('input');
+            parentEmailInput.type = 'text';
+            parentEmailInput.value = student.parent_email;
+            parentEmailInput.className = 'edit-input';
     
-        // Change "Edit" button to "Submit"
-        const editButton = parent.querySelector('.edit-button');
-        editButton.textContent = 'Submit';
+            const parentPhoneInput = document.createElement('input');
+            parentPhoneInput.type = 'text';
+            parentPhoneInput.value = student.parent_phone;
+            parentPhoneInput.className = 'edit-input';
     
-        // On submit, send the updated data to the server via PUT request
-        editButton.onclick = function () {
-            // Get the new values from the input fields
-            student.s_name = nameInput.value;
-            student.class_name = classInput.value;
-            student.parent_name = parentNameInput.value;
+            // Replace text elements with input fields
+            nameElement.replaceWith(nameInput);
+            parentNameElement.replaceWith(parentNameInput);
+            emailElement.replaceWith(parentEmailInput);
+            phoneElement.replaceWith(parentPhoneInput);
+    
+            // Change button text to "Submit"
+            editButton.textContent = "Submit";
+    
+            // Store the input fields in the button's dataset for later use
+            editButton.dataset.inputs = JSON.stringify({
+                nameInput,
+                parentNameInput,
+                parentEmailInput,
+                parentPhoneInput,
+            });
+
+            console.log(nameInput.value, parentNameInput.value, parentEmailInput.value, parentPhoneInput.value);
+        } else if (editButton.textContent === "Submit") {
+            // Retrieve the input fields from the button's dataset
+            const inputs = JSON.parse(editButton.dataset.inputs);
+    console.log(inputs);
+
+    
+            // Ensure all inputs are valid and not undefined
+            if (
+                !inputs.nameInput || !inputs.parentNameInput || !inputs.parentEmailInput || !inputs.parentPhoneInput
+            ) {
+                console.error("Inputs are not valid:", inputs);
+                return;
+            }
+    
+            // Update the student object with new values
+            student.s_name = inputs.nameInput.value;
+            student.parent_name = inputs.parentNameInput.value;
+            student.parent_email = inputs.parentEmailInput.value;
+            student.parent_phone = inputs.parentPhoneInput.value;
     
             // Prepare the PUT request body
             const updatedStudentData = {
@@ -176,7 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 parent_name: student.parent_name,
                 parent_email: student.parent_email,
                 parent_phone: student.parent_phone,
-                class_ids: student.classes.map(cls => cls.id) // Assuming class relationships are stored in student.classes
             };
     
             // Send the PUT request to the server
@@ -185,40 +216,64 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedStudentData)
+                body: JSON.stringify(updatedStudentData),
             })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Student updated:', data);
+    
+                    // Replace input fields with updated text elements
+                    const newNameElement = document.createElement('h2');
+                    newNameElement.className = 'student-name';
+                    newNameElement.textContent = student.s_name;
+    
+                    const newParentNameElement = document.createElement('h2');
+                    newParentNameElement.className = 'parent-name';
+                    newParentNameElement.textContent = student.parent_name;
+    
+                    const newEmailElement = document.createElement('h2');
+                    newEmailElement.className = 'parent-email';
+                    newEmailElement.textContent = student.parent_email;
+    
+                    const newPhoneElement = document.createElement('h2');
+                    newPhoneElement.className = 'parent-phone';
+                    newPhoneElement.textContent = student.parent_phone;
+    
+                    nameInput.replaceWith(newNameElement);
+                    parentNameInput.replaceWith(newParentNameElement);
+                    parentEmailInput.replaceWith(newEmailElement);
+                    parentPhoneInput.replaceWith(newPhoneElement);
+    
+                    // Change button text back to "Edit"
+                    editButton.textContent = "Edit";
+                })
+                .catch(error => {
+                    console.error('Error updating student:', error);
+                });
+        }
+    }
+    
+    
+    
+    function getClassIdsForStudent(studentId) {
+        // Fetch classes from the server
+        return fetch('http://localhost:8080/classes')
             .then(response => response.json())
-            .then(data => {
-                console.log('Student updated:', data);
-                // Update the DOM to reflect the changes
-                const updatedNameElement = document.createElement('h3');
-                updatedNameElement.className = 'koho-light student-name';
-                updatedNameElement.textContent = student.s_name;
+            .then(classes => {
+                // Filter the classes that the student is enrolled in
+                const studentClasses = classes.filter(cls => 
+                    cls.students.some(student => student.id === studentId)
+                );
     
-                const updatedClassElement = document.createElement('h3');
-                updatedClassElement.className = 'koho-light student-class';
-                updatedClassElement.textContent = student.class_name;
-    
-                const updatedParentNameElement = document.createElement('h3');
-                updatedParentNameElement.className = 'koho-light parent-name';
-                updatedParentNameElement.textContent = student.parent_name;
-    
-                nameInput.replaceWith(updatedNameElement);
-                classInput.replaceWith(updatedClassElement);
-                parentNameInput.replaceWith(updatedParentNameElement);
-    
-                // Change the button text back to "Edit"
-                editButton.textContent = 'Edit';
-                editButton.onclick = function () {
-                    editStudent(studentId);
-                };
+                // Return an array of class IDs for the student
+                return studentClasses.map(cls => cls.class_id);
             })
             .catch(error => {
-                console.error('Error updating student:', error);
-                alert('Error updating student');
+                console.error("Error fetching classes for student:", error);
+                return []; // Return an empty array in case of an error
             });
-        };
     }
+    
                 
     
     function sortAndDisplayStudents() {

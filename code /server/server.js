@@ -189,32 +189,60 @@ app.get('/students', (req, res) => {
 app.put('/students/:id', (req, res) => {
   const student_id = req.params.id;
   const { s_name, parent_name, parent_email, parent_phone, class_ids } = req.body;
+  console.log(req.body);
+  // Begin a transaction
+  db.serialize(() => {
+    db.run("BEGIN TRANSACTION"); // Start a transaction
 
-  const sql = `
-    UPDATE students 
-    SET s_name = ?, parent_name = ?, parent_email = ?, parent_phone = ?
-    WHERE id = ?
-  `;
-  const params = [s_name, parent_name, parent_email, parent_phone, student_id];
+    // Update student info
+    const sql = `
+      UPDATE students 
+      SET s_name = ?, parent_name = ?, parent_email = ?, parent_phone = ?
+      WHERE id = ?
+    `;
+    const params = [s_name, parent_name, parent_email, parent_phone, student_id];
 
-  db.run(sql, params, function (err) {
-    if (err) return res.status(500).json({ error: err.message });
+    db.run(sql, params, function (err) {
+      if (err) {
+        return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
+          res.status(500).json({ error: err.message });
+        });
+      }
 
-    // Update class relationships
-    db.run(`DELETE FROM class_students WHERE student_id = ?`, [student_id], (err) => {
-      if (err) return res.status(500).json({ error: err.message });
+      // Delete old class relationships
+      db.run(`DELETE FROM class_students WHERE student_id = ?`, [student_id], (err) => {
+        if (err) {
+          return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
+            res.status(500).json({ error: err.message });
+          });
+        }
 
-      const insertSql = `INSERT INTO class_students (class_id, student_id) VALUES (?, ?)`;
-      const stmt = db.prepare(insertSql);
-      class_ids.forEach(class_id => {
-        stmt.run(class_id, student_id);
+        // Insert new class relationships
+        const insertSql = `INSERT INTO class_students (class_id, student_id) VALUES (?, ?)`;
+        const stmt = db.prepare(insertSql);
+        
+        // Insert new class relationships into the database
+        class_ids.forEach(class_id => {
+          stmt.run(class_id, student_id, (err) => {
+            if (err) {
+              return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
+                res.status(500).json({ error: err.message });
+              });
+            }
+          });
+        });
+        
+        stmt.finalize(() => {
+          // Commit the transaction if all operations are successful
+          db.run("COMMIT", () => {
+            res.json({ message: 'Student updated successfully' });
+          });
+        });
       });
-      stmt.finalize();
-
-      res.json({ message: 'Student updated successfully' });
     });
   });
 });
+
 // Delete student logic
 app.delete('/students/:id', (req, res) => {
   const student_id = req.params.id;
