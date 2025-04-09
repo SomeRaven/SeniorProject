@@ -69,4 +69,15 @@ Student management software for the STEM Outreach Center
       - [ ] "as the director, I want to pull gender data going back 5 years"
       - [ ] "as a staff member, I want to pull my class data"
       - [ ] "as an admin, I want to export check in data"
+<<<<<<< HEAD
 - [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
+=======
+<<<<<<< HEAD
+- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
+=======
+      - [ ] "as a really cool iPad, I want to be able to check students in" 
+- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.)
+- [x] Data Rebase
+- [x] Fix frontend to match data rebase
+>>>>>>> c821bc6b851edc9271cba51790bf645556d2eeef
+>>>>>>> 60f2c2888dfa7afd8999aa01f03a04ed5bb6f2d8
