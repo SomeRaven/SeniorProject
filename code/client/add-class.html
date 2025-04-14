@@ -3,14 +3,33 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Classes - Kid Wrangler</title>
+    <title>Kid Wrangler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
-    <script src='classes-app.js'></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            try {
+                const res = await fetch("http://localhost:8080/session-check", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const data = await res.json();
+                if (!data.loggedIn) {
+                    localStorage.removeItem("userLoggedIn");
+                    window.location.href = "login-signup.html";
+                }
+            } catch (error) {
+                console.error("Session check failed", error);
+                window.location.href = "login-signup.html";
+            }
+        });
+    </script>
+    
+    <script src='add-class.js'></script>
 </head>
 <body>
     <div id="top-bar"> 
@@ -19,7 +38,7 @@
             <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
         </div>
         <div id="logo-title">
-            <h2 id="logout-button" class="koho-light">Logout</h3>
+            <h2 id="logout-button" class="koho-light">Logout</h2>
             <a href="help.html">
                 <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
             </a>
@@ -51,41 +70,29 @@
             </div>
         </div>
         <div id="content">
-            <div id="classes">
-                <h1 id="students-title" class="koho-bold" style="margin-bottom: 20px; font-size: 40px; margin-left: 10px;">Classes</h1>
-        
-                <div id="sort-search-add">
-                    <div id="students-main-left">
-                        <div id="sort">
-                            <h2 class="koho-medium" style="width: 99px;font-size: 19px;">Sort By:</h2>
-                            <select id="class-sort-select">
-                                <option value="class_name">Sort by Class Name</option>
-                                <option value="teacher">Sort by Teacher</option>
-                                <option value="semester">Sort by Semester</option>
-                                <option value="meeting_day">Sort by Meeting Day</option>
-                            </select>
-                                                       
-                        </div>
-                        <div id="search">
-                            <input type="text" id="class-search-bar" placeholder="Search" class="koho-semibold">
-                        </div>
-                    </div>
-                    <div id="students-main-right">
-                        <a href="export.html">
-                            <div id="export">
-                                <button id="export-button" class="koho-semibold">Export</button>
-                            </div>
-                        </a>
-                        <a href="add-class.html">
-                            <div id="add">
-                                <button id="class-add-button" class="koho-semibold">Add Class</button>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-        
-                <!-- Class rows will be dynamically added here -->
-                <div id="class-container"></div>
-            </div>
+            <h2>Add a Class</h2>
+            <form id="add-class-form">
+                <label for="class_name">Class Name:</label>
+                <input type="text" id="class_name" name="class_name" required>
+
+                <label for="teacher_name">Teacher Name:</label>
+                <input type="text" id="teacher_name" name="teacher_name" required>
+            
+                <label for="class_location">Location:</label>
+                <input type="text" id="class_location" name="class_location" required>
+                
+                <label for="meeting_day">Meeting Day:</label>
+                <input type="text" id="meeting_day" name="meeting_day" required>
+
+                <label for="class_time">Time:</label>
+                <input type="text" id="time" name="class_time" required>
+
+                <label for="semester">Semester:</label>
+                <input type="text" id="semester" name="semester" required>
+                
+                <button type="submit">Add Class</button>
+            </form>
         </div>
-</div>
+    </div>
+</body>
+</html>

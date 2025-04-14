@@ -2,15 +2,15 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Export Data - Kid Wrangler</title>
+    <title>Profile - Kid Wrangler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='style.css'>
+    <script src='https://kit.fontawesome.com/9a4d71dfc3.js' crossorigin='anonymous'></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=KoHo:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src='app.js'></script>
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+
+    <script src='app.js' defer></script>
 </head>
 <body>
     <div id="top-bar"> 
@@ -19,18 +19,17 @@
             <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
         </div>
         <div id="logo-title">
-            <h2 id="logout-button" class="koho-light">Logout</h3>
+            <h2 id="logout-button" class="koho-light">Logout</h2>
             <a href="help.html">
                 <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
             </a>
         </div>
     </div>
     <div id="main">
-        <!-- Left Sidebar -->
         <div id="left">
             <div id="user">
                 <a href="profile.html">
-                    <img src="user.png" id="user-icon" alt="User Icon">
+                    <img src="user.jpg" id="user-icon" alt="User Icon">
                 </a>
                 <h2 id="user-name" class="koho-bold">Funny Cat</h2>
                 <h3 id="user-company" class="koho-light">STEM Center</h3>
@@ -45,30 +44,29 @@
                     <i class="fa-solid fa-user fa-2x"></i>
                     <h3 class="koho-light">Students</h3>
                 </a>
+                <a href="classes.html" class="nav-item">
+                    <i class="fa-solid fa-book fa-2x"></i>
+                    <h3 class="koho-light">Classes</h3>
+                </a>
             </div>
         </div>
-        
-        <!-- Export Data Content -->
         <div id="content">
-            <div id="export-section">
-                <h1 class="koho-medium">Export Student Data</h1>
-                
-                <p>Select the format you want to export the data in:</p>
+            <div id="profile-section">
+                <h1 class="koho-medium">Your Profile</h1>
+                <form id="profile-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="Admin" disabled>
 
-                <div class="export-options">
-                    <button onclick="exportData('csv')" class="export-btn">
-                        <i class="fa-solid fa-file-csv"></i> Export as CSV
-                    </button>
-                    <button onclick="exportData('json')" class="export-btn">
-                        <i class="fa-solid fa-file-code"></i> Export as JSON
-                    </button>
-                    <button onclick="exportData('pdf')" class="export-btn">
-                        <i class="fa-solid fa-file-pdf"></i> Export as PDF
-                    </button>
-                </div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="stem@utahtech.edu" disabled>
+
+                    <label for="role">Role:</label>
+                    <input type="text" id="role" name="role" value="Administrator" disabled>
+
+                    <button type="submit">Update Profile</button>
+                </form>
             </div>
         </div>
     </div>
 </body>
-<script src="app.js"></script>
 </html>

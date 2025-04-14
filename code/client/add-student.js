@@ -6,6 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    document.getElementById('logout-button').addEventListener('click', function () {
+        logout();
+    });    
+    
+    function logout() {
+        localStorage.removeItem('userLoggedIn'); 
+        console.log("✅ Logging out...");
+        window.location.href = "login-signup.html"; // ✅ send them back to login
+      }
+
     // Fetch classes from the backend and populate the dropdown
     fetch("http://localhost:8080/classes")
         .then(response => response.json())

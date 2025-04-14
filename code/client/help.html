@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Help - Kid Wrangler</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='style.css'>
+    <script src='https://kit.fontawesome.com/9a4d71dfc3.js' crossorigin='anonymous'></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+
+    <script src='app.js' ></script>
+</head>
+<body>
+    <div id="top-bar"> 
+        <div id="logo-title">
+            <a href="check-in.html"><img src="cowboy.png" id="logo" alt="Cowboy Logo"></a>
+            <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
+        </div>
+        <div id="logo-title">
+            <h2 id="logout-button" class="koho-light">Logout</h2>
+            <a href="help.html">
+                <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
+            </a>
+        </div>
+    </div>
+    <div id="main">
+        <div id="left">
+            <div id="user">
+                <a href="profile.html">
+                    <img src="user.jpg" id="user-icon" alt="User Icon">
+                </a>
+                <h2 id="user-name" class="koho-bold">Admin</h2>
+                <h3 id="user-company" class="koho-light">STEM Center</h3>
+                <h3 id="user-title" class="koho-light">Administrator</h3>
+            </div>
+            <div id="nav">
+                <a href="check-in.html" class="nav-item">
+                    <i class="fa-solid fa-circle-check fa-2x"></i>
+                    <h3 class="koho-light">Check In</h3>
+                </a>
+                <a href="students.html" class="nav-item">
+                    <i class="fa-solid fa-user fa-2x"></i>
+                    <h3 class="koho-light">Students</h3>
+                </a>
+                <a href="classes.html" class="nav-item">
+                    <i class="fa-solid fa-book fa-2x"></i>
+                    <h3 class="koho-light">Classes</h3>
+                </a>
+            </div>
+        </div>
+        <div id="content">
+            <div id="help-section">
+                <h1 class="koho-medium">Need Help?</h1>
+                <p>If you're stuck or something isn't working right, this page is here to guide you.</p>
+                <h2>How-To</h2>
+                <div class="faq">
+                    <h3>Check In Students</h3>
+                    <p>Go to the Check In page, type or scan the student number, and click Check In.</p>
+                </div>
+                <div class="faq">
+                    <h3>View or Edit Student Info</h3>
+                    <p>Head to the Students page. You can search, edit, or remove students right there.</p>
+                </div>
+                <div class="faq">
+                    <h3>Manage Classes</h3>
+                    <p>Go to the Classes page to add, edit, or remove classes. You can also assign or remove students from classes directly in each class panel.</p>
+                </div>
+                <div class="faq">
+                    <h3>Export Data</h3>
+                    <p>Navigate to Export, select your filters, and choose your format: CSV or JSON.</p>
+                </div>
+
+                <h2>Contact Us</h2>
+                <ul>
+                    <li><i class="fa-solid fa-envelope"></i> support@kidwrangler.com</li>
+                    <li><i class="fa-solid fa-phone"></i> (123) 456-7890</li>
+                </ul>
+
+                <h2>Troubleshooting Tips</h2>
+                <p>Refresh the page, clear your browser cache, or double-check your student IDs.</p>
+            </div>
+        </div>
+    </div>
+    <script src='app.js' ></script>
+
+</body>
+</html>

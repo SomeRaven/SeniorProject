@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    document.getElementById('logout-button').addEventListener('click', function () {
+        logout();
+    });    
+    
+    function logout() {
+        localStorage.removeItem('userLoggedIn'); 
+        console.log("✅ Logging out...");
+        window.location.href = "login-signup.html"; // ✅ send them back to login
+      }
+    
+
     form.addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent form submission refresh
 

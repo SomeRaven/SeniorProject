@@ -3,14 +3,33 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Student - Kid Wrangler</title>
+    <title>Classes - Kid Wrangler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
-    <script src='app.js'></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            try {
+                const res = await fetch("http://localhost:8080/session-check", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const data = await res.json();
+                if (!data.loggedIn) {
+                    localStorage.removeItem("userLoggedIn");
+                    window.location.href = "login-signup.html";
+                }
+            } catch (error) {
+                console.error("Session check failed", error);
+                window.location.href = "login-signup.html";
+            }
+        });
+    </script>
+    
+    <script src='classes-app.js'></script>
 </head>
 <body>
     <div id="top-bar"> 
@@ -29,9 +48,9 @@
         <div id="left">
             <div id="user">
                 <a href="profile.html">
-                    <img src="user.png" id="user-icon" alt="User Icon">
+                    <img src="user.jpg" id="user-icon" alt="User Icon">
                 </a>
-                <h2 id="user-name" class="koho-bold">Funny Cat</h2>
+                <h2 id="user-name" class="koho-bold">Admin</h2>
                 <h3 id="user-company" class="koho-light">STEM Center</h3>
                 <h3 id="user-title" class="koho-light"> Administrator</h3>
             </div>
@@ -51,57 +70,41 @@
             </div>
         </div>
         <div id="content">
-            <div id="students">
-                <h1 id="students-title" class="koho-bold" style="
-                margin-bottom: 20px;
-                font-size: 40px;
-                margin-left: 10px;
-            ">Students</h1>                
-            <div id="sort-search-add">
-                    
+            <div id="classes">
+                <h1 id="students-title" class="koho-bold" style="margin-bottom: 20px; font-size: 40px; margin-left: 10px;">Classes</h1>
+        
+                <div id="sort-search-add">
                     <div id="students-main-left">
-                        
-
-                    <div id="sort">
-                        <h2 class="koho-medium" style="width: 99px;font-size: 19px;">Sort By:</h2>                    <select id="sort-select" class="koho-semibold">
-                            <option value="id">All</option>
-                            <option value="name">Class</option>
-                        </select>
+                        <div id="sort">
+                            <h2 class="koho-medium" style="width: 99px;font-size: 19px;">Sort By:</h2>
+                            <select id="class-sort-select">
+                                <option value="class_name">Sort by Class Name</option>
+                                <option value="teacher">Sort by Teacher</option>
+                                <option value="semester">Sort by Semester</option>
+                                <option value="meeting_day">Sort by Meeting Day</option>
+                            </select>
+                                                       
+                        </div>
+                        <div id="search">
+                            <input type="text" id="class-search-bar" placeholder="Search" class="koho-semibold">
+                        </div>
                     </div>
-                    <div id="search">
-                        <input type="text" id="search-bar" placeholder="Search" class="koho-semibold">
-                    </div>
-                </div>
                     <div id="students-main-right">
                         <a href="export.html">
                             <div id="export">
                                 <button id="export-button" class="koho-semibold">Export</button>
                             </div>
                         </a>
-                        <a href="add-student.html">
+                        <a href="add-class.html">
                             <div id="add">
-                                <button id="add-button" class="koho-semibold">Add Student</button>
+                                <button id="class-add-button" class="koho-semibold">Add Class</button>
                             </div>
                         </a>
                     </div>
                 </div>
-            </div>
-            <div id="title-header">
-                <i class="fa-solid fa-circle-user fa-5x" style="color: white;"></i>
-                <h2 id="name-header" class="koho-semibold">ID</h2>                
-                <h2 id="name-header" class="koho-semibold">Name</h2>   
-                <h2 id="grade-header" class="koho-semibold">Classes</h2>
-                <h2 id="parent-header" class="koho-semibold">Parent<br> Name</h2>
-                <h2 id="email-header" class="koho-semibold">Email</h2>
-                <h2 id="phone-header" class="koho-semibold">Phone</h2>
-            </div>
-            <div class="student-list">
-                <div id="student-row">
-                    <!-- Student rows will be appended here -->
-                </div>
+        
+                <!-- Class rows will be dynamically added here -->
+                <div id="class-container"></div>
             </div>
         </div>
-    </div>
-    <script src='app.js'></script>
-</body>
-</html>
+</div>

@@ -377,13 +377,22 @@ a {
     border-bottom: 1px solid #ccc;
 }
 
-.edit-button{
+.edit-button, .submit-button, .delete-button, .editClassButton, .deleteClassButton, .addStudent, .removeStudent {
     padding: 5px 10px;
     background-color: #3498db;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.delete-button{
+    margin-top: 5px;
+}
+
+.submit-button{
+    margin-top: 5px;
+    display: none;
 }
 
 #title-header {
@@ -400,6 +409,7 @@ a {
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-basis: 100%; /* Full width for student rows */
+    gap: 5px;
 }
 
 .student-row:last-child {

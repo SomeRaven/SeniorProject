@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Export Class Data - Kid Wrangler</title>
+    <link rel='stylesheet' href='style.css'>
+    <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="top-bar"> 
+        <div id="logo-title">
+            <a href="check-in.html"><img src="cowboy.png" id="logo" alt="Cowboy Logo"></a>
+            <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
+        </div>
+        <div id="logo-title">
+            <h2 id="logout-button" class="koho-light">Logout</h2>
+            <a href="help.html">
+                <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
+            </a>        </div>
+    </div>
+
+    <div id="main">
+        <div id="left">
+            <div id="user">
+                <a href="profile.html"><img src="user.jpg" id="user-icon" alt="User Icon"></a>
+                <h2 id="user-name" class="koho-bold">Admin</h2>
+                <h3 class="koho-light">STEM Center</h3>
+                <h3 class="koho-light">Administrator</h3>
+            </div>
+            <div id="nav">
+                <a href="check-in.html" class="nav-item">
+                    <i class="fa-solid fa-circle-check fa-2x"></i><h3 class="koho-light">Check In</h3>
+                </a>
+                <a href="students.html" class="nav-item">
+                    <i class="fa-solid fa-user fa-2x"></i><h3 class="koho-light">Students</h3>
+                </a>
+            </div>
+        </div>
+
+        <div id="content">
+            <div id="export-section">
+                <h1 class="koho-medium">Export Class Data</h1>
+
+                <p>Select a Class:</p>
+                <select id="class-select" class="koho-semibold">
+                    <option value="">Loading...</option>
+                </select>
+
+                <div class="export-options" style="margin-top: 20px;">
+                    <button onclick="exportData('csv')" class="export-btn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                    <button onclick="exportData('json')" class="export-btn"><i class="fa-solid fa-file-code"></i> Export JSON</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allClasses = [];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch("http://localhost:8080/class-students", { credentials: "include" });
+                allClasses = await res.json();
+
+                const classSelect = document.getElementById("class-select");
+                classSelect.innerHTML = '<option value="all">All Classes</option>';
+
+                allClasses.forEach(cls => {
+                    const option = document.createElement("option");
+                    option.value = cls.class_id;
+                    option.textContent = cls.class_name;
+                    classSelect.appendChild(option);
+                });
+
+            } catch (err) {
+                console.error("Error loading classes:", err);
+                document.getElementById("class-select").innerHTML = "<option>Error loading classes</option>";
+            }
+        });
+
+        function exportData(format) {
+    const selectedId = document.getElementById("class-select").value;
+    let exportSet = [];
+
+    if (selectedId === "all") {
+        allClasses.forEach(cls => {
+            cls.students
+                .filter(student => student.id)
+                .forEach(student => {
+                    exportSet.push({
+                        class_name: cls.class_name,
+                        ...student
+                    });
+                });
+        });
+
+        // ✅ Sort alphabetically by class name
+        exportSet.sort((a, b) => a.class_name.localeCompare(b.class_name));
+
+    } else {
+        const selectedClass = allClasses.find(cls => String(cls.class_id) === selectedId);
+        if (!selectedClass || !selectedClass.students.length) {
+            alert("No students found in selected class.");
+            return;
+        }
+
+        exportSet = selectedClass.students
+            .filter(student => student.id)
+            .map(student => ({
+                class_name: selectedClass.class_name,
+                ...student
+            }));
+    }
+
+    if (!exportSet.length) {
+        alert("No valid students to export.");
+        return;
+    }
+
+    if (format === "csv") {
+        const csv = convertToCSV(exportSet);
+        downloadFile(csv, `class_export.csv`, "text/csv");
+    } else if (format === "json") {
+        const json = JSON.stringify(exportSet, null, 2);
+        downloadFile(json, `class_export.json`, "application/json");
+    }
+}
+
+
+
+        function convertToCSV(data) {
+            if (!data.length) return "";
+            const headers = Object.keys(data[0]);
+            const rows = data.map(row => headers.map(h => `"${row[h] ?? ''}"`).join(","));
+            return [headers.join(","), ...rows].join("\n");
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

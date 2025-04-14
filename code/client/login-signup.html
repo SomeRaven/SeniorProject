@@ -2,14 +2,13 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Kid Wrangler - Login</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='style.css'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=KoHo:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+    <script src='signin-signout.js' defer></script>
 </head>
 <body>
     <div id="top-bar"> 
@@ -22,7 +21,7 @@
         <div class="auth-container">
             <!-- LOGIN FORM -->
             <div class="auth-box" id="login-box">
-                <h1 id="login-title" class="koho-bold">Login</h1>
+                <h1 class="koho-bold">Login</h1>
                 <div class="input-group">
                     <label for="login-email" class="koho-bold">Email</label>
                     <input type="email" id="login-email" class="koho-light" placeholder="Enter your email">
@@ -31,13 +30,13 @@
                     <label for="login-password" class="koho-bold">Password</label>
                     <input type="password" id="login-password" class="koho-light" placeholder="Enter your password">
                 </div>
-                <button class="auth-btn koho-light" onclick="handleLogin()" class="koho-light">Login</button>
+                <button class="auth-btn koho-light" onclick="handleLogin()">Login</button>
                 <p class="switch-auth koho-light">Don't have an account? <a href="#" onclick="toggleAuth('signup')">Sign up</a></p>
             </div>
 
             <!-- SIGNUP FORM -->
             <div class="auth-box hidden" id="signup-box">
-                <h1 id="login-title" class="koho-bold">Sign Up</h1>
+                <h1 class="koho-bold">Sign Up</h1>
                 <div class="input-group">
                     <label for="signup-name" class="koho-bold">Full Name</label>
                     <input type="text" id="signup-name" class="koho-light" placeholder="Enter your full name">
@@ -47,14 +46,13 @@
                     <input type="email" id="signup-email" class="koho-light" placeholder="Enter your email">
                 </div>
                 <div class="input-group">
-                    <label for="signup-password" class="koho-light">Password</label>
+                    <label for="signup-password" class="koho-bold">Password</label>
                     <input type="password" id="signup-password" class="koho-light" placeholder="Create a password">
                 </div>
-                <button class="auth-btn koho-light" onclick="handleSignup()" >Sign Up</button>
+                <button class="auth-btn koho-light" onclick="handleSignup()">Sign Up</button>
                 <p class="switch-auth koho-light">Already have an account? <a href="#" onclick="toggleAuth('login')">Login</a></p>
             </div>
         </div>
     </div>
-    <script src="signin-signout.js" defer></script>
 </body>
 </html>

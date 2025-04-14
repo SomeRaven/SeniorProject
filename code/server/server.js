@@ -9,10 +9,27 @@ const PORT = 8080;
 
 app.use(express.json());
 app.use(cookieParser());
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
+const session = require('express-session');
+
+app.use(session({
+  secret: 'secretKeyHere',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    sameSite: 'lax',   
+    secure: false      
+  }
+}));
 
 
-app.use(express.json());
-app.use(cors());
 
 const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath, (err) => {
@@ -84,14 +101,112 @@ db.run(`
       console.log('Checkin table is ready.');
     }
   });
+  db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    ); 
+    `, (err) => {
+        if (err) console.error('Error creating users table:', err.message);
+        else console.log('Users table is ready.');
+  });
 });
+
+// Register route
+app.post('/register', async (req, res) => {
+    const { email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    
+    const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
+    db.run(query, [email, hashedPassword], function (err) {
+        if (err) return res.status(500).send("User already exists or error occurred.");
+        res.status(201).send({ userId: this.lastID });
+    });
+});
+
+app.get('/users', (req, res) => {
+  db.all('SELECT id, email FROM users', [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+}
+);
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).send("Email and password are required.");
+  }
+
+  db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
+    if (err) return res.status(500).send("Database error.");
+    if (!user || !user.password) return res.status(401).send("Invalid credentials.");
+
+    try {
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) return res.status(401).send("Invalid credentials.");
+
+      req.session.userId = user.id;
+      console.log("Session userId at check-in:", req.session.userId);
+      res.status(200).json({ message: "Login successful" });
+    } catch (compareError) {
+      console.error("Bcrypt compare failed:", compareError);
+      res.status(500).send("Error verifying password.");
+    }
+  });
+});
+
+
+
+function authRequired(req, res, next) {
+  if (!req.session.userId) {
+    const isApi = req.headers.accept?.includes("application/json") || req.url.startsWith("/api/");
+    if (isApi) {
+      return res.status(401).json({ error: "Not logged in" });
+    } else {
+      return res.redirect('/login-signup.html');
+    }
+  }
+  next();
+}
+
+
+
+app.get('/session-check', (req, res) => {
+  if (req.session.userId) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+
+app.get('/me', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+
+  db.get('SELECT id, email FROM users WHERE id = ?', [req.session.userId], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(row);
+  });
+});
+
+
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login');
+  });
+});
+
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Students and Check-in API!');
 });
 
 // Add student logic 
-app.post('/students', (req, res) => {
+app.post('/students', authRequired,(req, res) => {
   const { student, class_ids } = req.body;
 
   const missingFields = [];
@@ -149,7 +264,7 @@ app.post('/students', (req, res) => {
 });
 
 // get student logic 
-app.get('/students', (req, res) => {
+app.get('/students', authRequired, (req, res) => {
   const sql = `
     SELECT 
       students.id AS student_id,
@@ -186,54 +301,57 @@ app.get('/students', (req, res) => {
 });
 
 //edit student logic
-app.put('/students/:id', (req, res) => {
+app.put('/students/:id', authRequired, (req, res) => {
   const student_id = req.params.id;
-  const { s_name, parent_name, parent_email, parent_phone, class_ids } = req.body;
-  console.log(req.body);
-  // Begin a transaction
-  db.serialize(() => {
-    db.run("BEGIN TRANSACTION"); // Start a transaction
+  const { student, class_ids } = req.body;
+  const { s_name, parent_name, parent_email, parent_phone } = student;
 
-    // Update student info
-    const sql = `
+  console.log(req.body);
+
+  db.serialize(() => {
+    db.run("BEGIN TRANSACTION");
+
+    const updateSql = `
       UPDATE students 
       SET s_name = ?, parent_name = ?, parent_email = ?, parent_phone = ?
       WHERE id = ?
     `;
-    const params = [s_name, parent_name, parent_email, parent_phone, student_id];
+    const updateParams = [s_name, parent_name, parent_email, parent_phone, student_id];
 
-    db.run(sql, params, function (err) {
+    db.run(updateSql, updateParams, function (err) {
       if (err) {
-        return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
+        return db.run("ROLLBACK", () => {
           res.status(500).json({ error: err.message });
         });
       }
 
-      // Delete old class relationships
       db.run(`DELETE FROM class_students WHERE student_id = ?`, [student_id], (err) => {
         if (err) {
-          return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
+          return db.run("ROLLBACK", () => {
             res.status(500).json({ error: err.message });
           });
         }
 
-        // Insert new class relationships
         const insertSql = `INSERT INTO class_students (class_id, student_id) VALUES (?, ?)`;
         const stmt = db.prepare(insertSql);
+
+        class_ids.forEach(entry => {
+          const ids = typeof entry === 'string'
+            ? entry.split(',').map(id => id.trim())
+            : [entry]; // wrap number in array
         
-        // Insert new class relationships into the database
-        class_ids.forEach(class_id => {
-          stmt.run(class_id, student_id, (err) => {
-            if (err) {
-              return db.run("ROLLBACK", () => { // Rollback transaction if error occurs
-                res.status(500).json({ error: err.message });
-              });
-            }
+          ids.forEach(class_id => {
+            stmt.run(class_id, student_id, (err) => {
+              if (err) {
+                return db.run("ROLLBACK", () => {
+                  res.status(500).json({ error: err.message });
+                });
+              }
+            });
           });
         });
         
         stmt.finalize(() => {
-          // Commit the transaction if all operations are successful
           db.run("COMMIT", () => {
             res.json({ message: 'Student updated successfully' });
           });
@@ -243,8 +361,9 @@ app.put('/students/:id', (req, res) => {
   });
 });
 
+
 // Delete student logic
-app.delete('/students/:id', (req, res) => {
+app.delete('/students/:id', authRequired, (req, res) => {
   const student_id = req.params.id;
 
   db.run(`DELETE FROM students WHERE id = ?`, [student_id], function (err) {
@@ -290,7 +409,7 @@ app.get('/classes', (req, res) => {
 });
 
 // Add class logic 
-app.post('/classes', (req, res) => {
+app.post('/classes', authRequired, (req, res) => {
   const { class_name, location, time, meeting_day, semester, teacher } = req.body;
 
   if (!class_name || !location || !time || !meeting_day || !semester || !teacher) {
@@ -320,7 +439,7 @@ app.post('/classes', (req, res) => {
   });
 });
 // Edit class logic
-app.put('/classes/:id', (req, res) => {
+app.put('/classes/:id', authRequired, (req, res) => {
   const class_id = req.params.id;
   const { class_name, location, time, meeting_day, semester, teacher } = req.body;
 
@@ -349,32 +468,27 @@ app.delete('/classes/:id', (req, res) => {
 
 
 // get class-student logic 
-app.get('/class-students', (req, res) => {
+app.get('/class-students', authRequired, (req, res) => {
   const sql = `
-    SELECT 
-      classes.id AS class_id,
-      classes.class_name,
-      classes.location,
-      classes.time,
-      classes.meeting_day,
-      classes.semester,
-      classes.teacher,
-      COALESCE(
-        json_group_array(
-          json_object(
-            'id', students.id, 
-            'name', students.s_name,
-            'parent_name', students.parent_name,
-            'parent_email', students.parent_email,
-            'parent_phone', students.parent_phone
-          )
-        ), 
-        '[]'
-      ) AS students
-    FROM classes
-    LEFT JOIN class_students ON classes.id = class_students.class_id
-    LEFT JOIN students ON class_students.student_id = students.id
-    GROUP BY classes.id
+  SELECT 
+  classes.id AS class_id,
+  classes.class_name,
+  classes.location,
+  classes.time,
+  classes.meeting_day,
+  classes.semester,
+  classes.teacher,
+  COALESCE(
+    json_group_array(
+      json_object('id', students.id, 'name', students.s_name, 'parent_name', students.parent_name, 'parent_email', students.parent_email, 'parent_phone', students.parent_phone)
+    ), 
+    '[]'
+  ) AS students
+FROM classes
+LEFT JOIN class_students ON classes.id = class_students.class_id
+LEFT JOIN students ON class_students.student_id = students.id AND students.id IS NOT NULL
+GROUP BY classes.id;
+
   `;
 
   db.all(sql, [], (err, rows) => {
@@ -390,7 +504,7 @@ app.get('/class-students', (req, res) => {
 });
 
 // Add class-student logic (i dont think i need this)
-app.post('/class-students', (req, res) => {
+app.post('/class-students', authRequired, (req, res) => {
   const { class_id, student_ids } = req.body;
 
   if (!class_id || !Array.isArray(student_ids) || student_ids.length === 0) {
@@ -411,14 +525,42 @@ app.post('/class-students', (req, res) => {
       }
     });
   });
-
-  stmt.finalize();
-
-  res.status(201).json({ message: "Students enrolled successfully", class_id, student_ids });
+  stmt.finalize(() => {
+    res.json({ message: 'Student(s) enrolled in class successfully' });
+  }
+  );
 });
 
+  // Remove student from class
+  app.delete('/class-students', authRequired, (req, res) => {
+    const { class_id, student_ids } = req.body;
+    console.log(req.body);
+  
+    if (!class_id || !Array.isArray(student_ids) || student_ids.length === 0) {
+      return res.status(400).json({ error: 'Missing or invalid class_id or student_ids' });
+    }
+  
+    // Prepare SQL statement
+    const sql = `DELETE FROM class_students WHERE class_id = ? AND student_id = ?`;
+    const stmt = db.prepare(sql);
+  
+    student_ids.forEach(student_id => {
+      stmt.run(class_id, student_id, (err) => {
+        if (err) {
+          console.error(`Error removing student ${student_id} from class ${class_id}:`, err.message);
+          return res.status(500).json({ error: err.message });
+        }
+      });
+    });
+  
+    stmt.finalize(() => {
+      res.json({ message: 'Student(s) removed from class successfully' });
+    });
+  });
+  
+
 // get check-in logic
-app.get('/check-in', (req, res) => {
+app.get('/check-in', authRequired, (req, res) => {
   db.all('SELECT * FROM checkin', [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -428,7 +570,7 @@ app.get('/check-in', (req, res) => {
   });
 });
 // add check-in logic 
-app.post('/check-in', (req, res) => {
+app.post('/check-in', authRequired, (req, res) => {
   const { time, date, student_id } = req.body;
   if (!time || !date || !student_id) {
     return res.status(400).json({ error: 'Missing required fields' });

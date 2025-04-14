@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Student - Kid Wrangler</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <script src="https://kit.fontawesome.com/9a4d71dfc3.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            try {
+                const res = await fetch("http://localhost:8080/session-check", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const data = await res.json();
+                if (!data.loggedIn) {
+                    localStorage.removeItem("userLoggedIn");
+                    window.location.href = "login-signup.html";
+                }
+            } catch (error) {
+                console.error("Session check failed", error);
+                window.location.href = "login-signup.html";
+            }
+        });
+    </script>
+    
+</head>
+<body>
+    <div id="top-bar"> 
+        <div id="logo-title">
+            <a href="check-in.html"><img src="cowboy.png" id="logo" alt="Cowboy Logo"></a>
+            <a href="check-in.html"><h1 id="title" class="koho-medium">Student Wrangler</h1></a>
+        </div>
+        <div id="logo-title">
+            <div id="logo-title">
+                <h2 id="logout-button" class="koho-light">Logout</h2> <!-- Initially hidden -->
+                <a href="help.html">
+                    <i id='help-icon' class="fa-solid fa-circle-question fa-4x"></i>
+                </a>
+            </div>            
+        </div>
+    </div>
+    <div id="main">
+        <div id="left">
+            <div id="user">
+                <a href="profile.html">
+                    <img src="user.jpg" id="user-icon" alt="User Icon">
+                </a>
+                <h2 id="user-name" class="koho-bold">Admin</h2>
+                <h3 id="user-company" class="koho-light">STEM Center</h3>
+                <h3 id="user-title" class="koho-light">Administrator</h3>
+            </div>
+            <div id="nav">
+                <a href="check-in.html" class="nav-item">
+                    <i class="fa-solid fa-circle-check fa-2x"></i>
+                    <h3 class="koho-light">Check In</h3>
+                </a>
+                <a href="students.html" class="nav-item">
+                    <i class="fa-solid fa-user fa-2x"></i>
+                    <h3 class="koho-light">Students</h3>
+                </a>
+                <a href="classes.html" class="nav-item">
+                    <i class="fa-solid fa-book fa-2x"></i>
+                    <h3 class="koho-light">Classes</h3>
+                </a>
+            </div>
+        </div>
+        <div id="content">
+            <div id="students">
+                <h1 id="students-title" class="koho-bold" style="
+                margin-bottom: 20px;
+                font-size: 40px;
+                margin-left: 10px;
+            ">Students</h1>                
+            <div id="sort-search-add">
+                    
+                    <div id="students-main-left">
+                        
+
+                    <div id="sort">
+                        <h2 class="koho-medium" style="width: 99px;font-size: 19px;">Sort By:</h2>                    <select id="sort-select" class="koho-semibold">
+                            <option value="id">All</option>
+                            <option value="name">Class</option>
+                        </select>
+                    </div>
+                    <div id="search">
+                        <input type="text" id="search-bar" placeholder="Search" class="koho-semibold">
+                    </div>
+                </div>
+                    <div id="students-main-right">
+                        <a href="export-admin.html">
+                            <div id="export">
+                                <button id="export-button" class="koho-semibold">Export</button>
+                            </div>
+                        </a>
+                        <a href="add-student.html">
+                            <div id="add">
+                                <button id="add-button" class="koho-semibold">Add Student</button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="title-header">
+                <i class="fa-solid fa-circle-user fa-5x" style="color: white;"></i>
+                <h2 id="name-header" class="koho-semibold">ID</h2>                
+                <h2 id="name-header" class="koho-semibold">Name</h2>   
+                <h2 id="grade-header" class="koho-semibold">Classes</h2>
+                <h2 id="parent-header" class="koho-semibold">Parent<br> Name</h2>
+                <h2 id="email-header" class="koho-semibold">Email</h2>
+                <h2 id="phone-header" class="koho-semibold">Phone</h2>
+            </div>
+            <div class="student-list">
+                <div id="student-row">
+                    <!-- Student rows will be appended here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='app.js'></script>
+</body>
+</html>

@@ -1,83 +1,115 @@
-This is a web application that manages students, classes, and check-ins using an Express.js backend with a SQLite database. Below is an overview of the components and functionality of the application:
+# 🐴 Kid Wrangler
 
-### Overview
-The app provides endpoints to manage students, classes, and check-ins for the Utah Tech STEM Outreach Center. It allows the creation of students, classes, and their associations, as well as tracking student check-ins.
+Kid Wrangler is a full-stack web application designed to help administrators efficiently manage students, classes, and check-in systems for educational programs like afterschool STEM centers. Built with SQLite, Node.js, and vanilla JavaScript, the app provides simple interfaces for login, student/class management, and data export.
 
-#### Backend (Express.js and SQLite)
-1. **Student Management:**
-   - `POST /students`: Add a new student with associated classes.
-   - `GET /students`: Retrieve a list of all students along with their class information.
+---
 
-2. **Class Management:**
-   - `POST /classes`: Add a new class.
-   - `GET /classes`: Retrieve a list of all classes, including student enrollment details.
+## ✨ Features
 
-3. **Class-Student Association:**
-   - `POST /class-students`: Link students to classes (this route isn't currently in use).
-   - `GET /class-students`: Retrieve classes with student enrollment details.
+- 🔐 **User Authentication** – Secure login and signup using hashed passwords and session cookies.
+- 🧍 **Student Management** – Add, edit, and delete student profiles; assign them to classes.
+- 📚 **Class Management** – Create and manage classes with teacher info, meeting times, and locations.
+- ✅ **Check-In System** – Scan or enter student ID for attendance tracking; supports multiple classes per student.
+- 📦 **Data Export** – Export class/student data as CSV or JSON.
+- 📄 **Help Page** – Built-in FAQ and troubleshooting tips for users.
 
-4. **Check-in Management:**
-   - `POST /check-in`: Log a student's check-in with the current time and date (logic is partially implemented).
+---
 
-#### SQLite Database:
-The database consists of the following tables:
-- **students**: Stores student information (ID, name, parent contact).
-- **classes**: Stores class information (ID, name, teacher, location, schedule).
-- **class_students**: Associates students with their enrolled classes.
-- **checkin**: Logs the check-in records for students.
+## 🛠 Tech Stack
 
-#### Frontend (HTML, CSS, and JavaScript)
-1. **Dynamic Date and Time:**
-   - Displays the current date and time on the check-in page, updating every second.
+- **Frontend:** HTML, CSS (KoHo font styling), vanilla JS
+- **Backend:** Node.js, Express, SQLite
+- **Authentication:** express-session, bcrypt
+- **Other tools:** Font Awesome, localStorage, cookie/session handling
 
-2. **Student Management:**
-   - Displays a list of students and their associated classes, sortable by different criteria.
-   - Includes a search feature to filter students by name, class, or parent details.
+---
 
-3. **Class Management:**
-   - Displays all classes along with the students enrolled in each class.
-   - Provides the ability to add students to classes dynamically.
+## 📁 Project Structure
 
-4. **Check-in Feature:**
-   - Allows students to check in with a real-time clock, sending data to the server to log the check-in.
+```
+.
+├── client/
+│   ├── login-signup.html
+│   ├── check-in.html
+│   ├── students.html
+│   ├── classes.html
+│   ├── add-student.html
+│   ├── add-class.html
+│   ├── profile.html
+│   ├── export-admin.html
+│   ├── help.html
+│   ├── style.css
+│   ├── app.js
+│   ├── add-student.js
+│   ├── add-class.js
+│   ├── classes-app.js
+│   ├── signin-signout.js
+│   └── assets/
+│       └── cowboy.png, user.png
+├── server.js
+├── database.sqlite
+└── README.md
+```
 
-5. **Form Handling:**
-   - Includes forms to add students and assign them to classes, dynamically populated with class data from the server.
+---
 
-6. **UI Enhancements:**
-   - The application includes animations, such as a checkmark animation upon successful check-in.
+## 🚀 How to Run
 
-#### Key Technologies:
-- **Backend**: Express.js, SQLite, CORS, Cookie Parsing
-- **Frontend**: HTML, CSS, JavaScript (Fetch API for dynamic data handling)
-- **Database**: SQLite for storing students, classes, and check-ins.
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/yourusername/kid-wrangler.git
+   cd kid-wrangler
+   ```
 
-#### Features to Implement:
-- Finish the check-in functionality.
-- Finalize student and class search/filtering logic.
+2. **Install dependencies**
+   ```bash
+   npm install express sqlite3 cors bcrypt express-session cookie-parser
+   ```
 
-This app provides a simple yet effective way to manage students, classes, and track their attendance via check-ins, with a user-friendly interface and dynamic data interactions.
-# SeniorProject
-Student management software for the STEM Outreach Center
-- [X] Check in check out
-- [X] display information about students
-- [X] In depth data
-- [ ] Admin, Staff, Parent Profiles
-- [X] Student look up
-- [ ] Exporting data
-- [ ] Exporting data using theses user stories
-      - [ ] "as the director, I want to pull gender data going back 5 years"
-      - [ ] "as a staff member, I want to pull my class data"
-      - [ ] "as an admin, I want to export check in data"
-<<<<<<< HEAD
-- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
-=======
-<<<<<<< HEAD
-- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.) 
-=======
-      - [ ] "as a really cool iPad, I want to be able to check students in" 
-- [ ] Semester by semester data (only want this semesters student data displayed but keep old data.)
-- [x] Data Rebase
-- [x] Fix frontend to match data rebase
->>>>>>> c821bc6b851edc9271cba51790bf645556d2eeef
->>>>>>> 60f2c2888dfa7afd8999aa01f03a04ed5bb6f2d8
+3. **Start the server**
+   ```bash
+   node server.js
+   ```
+
+4. **Visit the app**
+host html files through 
+   ```
+   http://localhost:5500/client/login-signup.html
+   ```
+
+---
+
+## 🔐 Authentication
+
+- Users must sign up and log in to access any functionality.
+- Session-based authentication with cookie storage ensures secure access.
+
+---
+
+## 📤 Export Options
+
+Go to `export-admin.html` to export student data by class or as a full list:
+- 📄 CSV
+- 🧾 JSON
+
+Only students with valid IDs are included in exports.
+
+---
+
+## 🧪 Dev Notes
+
+- Uses client-side validation for forms.
+- Responsive design for most admin tasks.
+- Default admin display name: `Admin` 
+
+---
+
+## 📬 Contact
+
+Need help or want to contribute?
+
+Email: [support@kidwrangler.com](mailto:support@kidwrangler.com)
+
+---
+
+Made with 💙 at the STEM Center
