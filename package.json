@@ -1,0 +1,20 @@
+{
+  "name": "seniorproject",
+  "version": "1.0.0",
+  "description": "Kid Wrangler is a full-stack web application designed to help administrators efficiently manage students, classes, and check-in systems for educational programs like afterschool STEM centers. Built with SQLite, Node.js, and vanilla JavaScript, the app provides simple interfaces for login, student/class management, and data export.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SomeRaven/SeniorProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SomeRaven/SeniorProject/issues"
+  },
+  "homepage": "https://github.com/SomeRaven/SeniorProject#readme"
+}
