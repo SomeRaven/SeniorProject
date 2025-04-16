@@ -44,8 +44,8 @@ Kid Wrangler is a full-stack web application designed to help administrators eff
 │   ├── add-class.js
 │   ├── classes-app.js
 │   ├── signin-signout.js
-│   └── assets/
-│       └── cowboy.png, user.png
+│   ├── user.png
+│   └── cowboy.png
 ├── server.js
 ├── database.sqlite
 └── README.md
