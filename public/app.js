@@ -240,7 +240,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(updatedStudent)
+                    body: JSON.stringify(updatedStudent),
+                    credentials: "include" // Include cookies in the request
+
                 });
     
                 if (!response.ok) throw new Error("Failed to update student");
@@ -271,7 +273,9 @@ document.addEventListener("DOMContentLoaded", function () {
     async function deleteStudent(studentId) {
         // Delete the student from the server
         const deleteResponse = await fetch(`http://localhost:8080/students/${studentId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            credentials: "include" // Include cookies in the request
+
         });
     
         if (!deleteResponse.ok) throw new Error("Failed to delete student");

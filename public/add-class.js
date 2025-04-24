@@ -46,29 +46,38 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         console.log("🚀 Sending class data:", classData);
-
         try {
             const response = await fetch("http://localhost:8080/classes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(classData)
+                body: JSON.stringify(classData),
+                credentials: "include" // Include cookies in the request
             });
-
-            const result = await response.json();
-
+        
+            const contentType = response.headers.get("content-type");
+        
+            let result;
+            if (contentType && contentType.includes("application/json")) {
+                result = await response.json();
+            } else {
+                const text = await response.text();
+                console.error("❌ Expected JSON but got:", text);
+                throw new Error("Server did not return JSON");
+            }
+        
             if (!response.ok) {
                 console.error("❌ Server Error:", result);
                 alert(`Error: ${result.message || "Failed to add class."}`);
                 return;
             }
-
+        
             console.log("✅ Class added successfully:", result);
             alert("Class added successfully!");
             form.reset();
-
+        
         } catch (error) {
             console.error("❌ Network error:", error);
             alert("An error occurred while adding the class. Please try again.");
-        }
+        }        
     });
 });

@@ -233,7 +233,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 const response = await fetch(`http://localhost:8080/classes/${classId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedClass)
+                    body: JSON.stringify(updatedClass),
+                    credentials: "include" // Include cookies in the request
+
                 });
 
                 if (!response.ok) throw new Error("Failed to update class");
@@ -275,7 +277,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const trimmedId = studentId.trim();
         console.log("Adding student with ID:", trimmedId);
     
-        fetch("http://localhost:8080/students")
+        fetch("http://localhost:8080/students", {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: "include" // Include cookies in the request
+        }
+        )
             .then(response => response.json())
             .then(students => {
                 console.log("Fetched students:", students);
@@ -295,7 +302,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify({
                         class_id: classId,
                         student_ids: [trimmedId]
-                    })
+                    }),
+                    credentials: "include" // Include cookies in the request
+
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -320,7 +329,9 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify({
                 class_id: classId,
                 student_ids: [studentId]
-            })
+            }),
+            credentials: "include" // Include cookies in the request
+
         })
         .then(response => response.json())
         .then(data => {

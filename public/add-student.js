@@ -77,7 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            credentials: "include" // Include cookies in the request
+
         })
         .then(response => response.json())
         .then(data => {
