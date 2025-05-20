@@ -17,6 +17,9 @@ app.use(cors({
   credentials: true
 }));
 
+const publicPath = path.join(__dirname, 'public');
+app.use(express.static(publicPath));
+
 const session = require('express-session');
 
 app.use(session({
@@ -629,8 +632,7 @@ app.post('/check-in', authRequired, (req, res) => {
   });
 });
 
-const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
