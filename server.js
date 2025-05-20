@@ -25,10 +25,11 @@ const SQLiteStore = require('connect-sqlite3')(session);
 
 app.use(session({
   store: new SQLiteStore({
-    dir: '/tmp',  // ✅ must be /tmp on Render
-    db: 'sessions.sqlite'
+    dir: '/tmp',
+    db: 'sessions.sqlite',
+    concurrentDB: true // 🔐 prevents locking problems
   }),
-  secret: 'yourSecretKeyHere',
+  secret: 'yourSuperSecretKey',
   resave: false,
   saveUninitialized: false,
   cookie: {
