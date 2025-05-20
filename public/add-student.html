@@ -13,7 +13,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
             try {
-                const res = await fetch("http://localhost:8080/session-check", {
+                const res = await fetch("/session-check", {
                     method: "GET",
                     credentials: "include"
                 });
