@@ -26,7 +26,20 @@ createApp({
           return;
         }
 
-        window.location.href = '/check-in.html';
+        if (response.ok) {
+            localStorage.setItem('userLoggedIn', 'true');
+            console.log("✅ Login successful — delaying redirect...");
+        
+            // 👇 Log all non-HttpOnly cookies (this won't show session cookie)
+            console.log("🍪 document.cookie:", document.cookie);
+        
+            // 👇 You can still see session cookie in browser DevTools > Application > Cookies
+        
+            setTimeout(() => {
+                window.location.href = 'check-in.html';
+            }, 2000);
+        }
+        
       } catch (err) {
         error.value = 'Network error';
         console.error(err);
