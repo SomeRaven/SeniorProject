@@ -1,217 +1,100 @@
+// --- Module Imports ---
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const sqlite3 = require("sqlite3").verbose();
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const session = require("cookie-session");
+const fs = require("fs");
+
+// --- App Setup ---
 const app = express();
 const PORT = 8080;
-const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const SQLiteStore = require("connect-sqlite3")(session);
-const express = require('express');
-
-app.use(express.json());
-app.use(cookieParser());
-const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+// --- Middleware ---
+app.set("trust proxy", 1);
 app.use(cors({
-  origin: true,
+  origin: "https://stem-center.onrender.com",
   credentials: true
 }));
-
-const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
-
-
-
-app.set('trust proxy', 1); // ✅ Tell Express to trust proxy headers
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(session({
-    store: new SQLiteStore({ db: "sessions.sqlite", dir: "./tmp" }),
-    secret: process.env.SESSION_SECRET || "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        sameSite: 'none',        // ✅ Required for cross-origin cookies
-        secure: true             // ✅ Must be true on Render (HTTPS)
-    }
+  name: "session",
+  keys: [process.env.SESSION_SECRET || "keyboard cat"],
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  sameSite: "none",
+  secure: true
 }));
 
-
-const dbPath = path.join(__dirname, 'database.sqlite');
+// --- SQLite DB Setup ---
+const dbPath = path.join(__dirname, "database.sqlite");
 const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Error connecting to SQLite database:', err.message);
-  } else {
-    console.log('Connected to SQLite database.');
-  }
+  if (err) console.error("Error connecting to SQLite database:", err.message);
+  else console.log("Connected to SQLite database.");
 });
 
+// --- Table Initialization ---
 db.serialize(() => {
-  // Create the table (this part looks fine)
-db.run(`
-    CREATE TABLE IF NOT EXISTS students (
-      id TEXT PRIMARY KEY,
-      s_name TEXT NOT NULL,
-      parent_name TEXT NOT NULL,
-      parent_email TEXT NOT NULL,
-      parent_phone TEXT NOT NULL
-    );
-  `, (err) => {
-    if (err) console.error('Error creating students table:', err.message);
-    else console.log('Students table is ready.');
-  });
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS classes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      class_name TEXT NOT NULL,
-      location TEXT NOT NULL,
-      time TEXT NOT NULL,
-      meeting_day TEXT NOT NULL,
-      semester TEXT NOT NULL,
-      teacher TEXT NOT NULL
-    );
-  `, (err) => {
-    if (err) console.error('Error creating classes table:', err.message);
-    else console.log('Classes table is ready.');
-  });
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS class_students (
-      class_id INTEGER NOT NULL,
-      student_id TEXT NOT NULL,  
-      PRIMARY KEY (class_id, student_id),
-      FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
-      FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
-    );
-  `, (err) => {
-    if (err) console.error('Error creating class_students table:', err.message);
-    else console.log('Class-Student relationship table is ready.');
-  });
-  
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS checkin (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT NOT NULL,
-        time TEXT NOT NULL,
-        student_id TEXT NOT NULL,
-        class_id INTEGER NOT NULL,  -- NEW COLUMN to track which class the check-in belongs to
-        FOREIGN KEY (student_id) REFERENCES students(id),
-        FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
-    );
-  `, (err) => {
-    if (err) {
-      console.error('Error creating checkin table:', err.message);
-    } else {
-      console.log('Checkin table is ready.');
-    }
-  });
-  db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    ); 
-    `, (err) => {
-        if (err) console.error('Error creating users table:', err.message);
-        else console.log('Users table is ready.');
-  });
+  db.run(`CREATE TABLE IF NOT EXISTS students (id TEXT PRIMARY KEY, s_name TEXT NOT NULL, parent_name TEXT NOT NULL, parent_email TEXT NOT NULL, parent_phone TEXT NOT NULL);`);
+  db.run(`CREATE TABLE IF NOT EXISTS classes (id INTEGER PRIMARY KEY AUTOINCREMENT, class_name TEXT NOT NULL, location TEXT NOT NULL, time TEXT NOT NULL, meeting_day TEXT NOT NULL, semester TEXT NOT NULL, teacher TEXT NOT NULL);`);
+  db.run(`CREATE TABLE IF NOT EXISTS class_students (class_id INTEGER NOT NULL, student_id TEXT NOT NULL, PRIMARY KEY (class_id, student_id), FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE, FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE);`);
+  db.run(`CREATE TABLE IF NOT EXISTS checkin (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, time TEXT NOT NULL, student_id TEXT NOT NULL, class_id INTEGER NOT NULL, FOREIGN KEY (student_id) REFERENCES students(id), FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE);`);
+  db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL);`);
 });
 
-// Register route
-app.post('/register', async (req, res) => {
-    const { email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
-    const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
-    db.run(query, [email, hashedPassword], function (err) {
-        if (err) return res.status(500).send("User already exists or error occurred.");
-        res.status(201).send({ userId: this.lastID });
-    });
-});
-
-app.get('/users', (req, res) => {
-  db.all('SELECT id, email FROM users', [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
-  });
-}
-);
-
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).send("Email and password are required.");
-  }
-
-  db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
-    if (err) return res.status(500).send("Database error.");
-    if (!user || !user.password) return res.status(401).send("Invalid credentials.");
-
-    try {
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return res.status(401).send("Invalid credentials.");
-
-      req.session.userId = user.id;
-      console.log("Session userId at check-in:", req.session.userId);
-      res.status(200).json({ message: "Login successful" });
-    } catch (compareError) {
-      console.error("Bcrypt compare failed:", compareError);
-      res.status(500).send("Error verifying password.");
-    }
-  });
-});
-
-
-
+// --- Auth Middleware ---
 function authRequired(req, res, next) {
   if (!req.session.userId) {
-    const isApi = req.headers.accept?.includes("application/json") || req.url.startsWith("/api/");
-    if (isApi) {
-      return res.status(401).json({ error: "Not logged in" });
-    } else {
-      return res.redirect('/login-signup.html');
-    }
+    return req.headers.accept?.includes("application/json")
+      ? res.status(401).json({ error: "Not logged in" })
+      : res.redirect("/login-signup.html");
   }
   next();
 }
 
+// --- Routes ---
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  db.run(`INSERT INTO users (email, password) VALUES (?, ?)`, [email, hashedPassword], function (err) {
+    if (err) return res.status(500).send("User already exists or error occurred.");
+    res.status(201).send({ userId: this.lastID });
+  });
+});
 
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).send("Email and password are required.");
+  db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, user) => {
+    if (err) return res.status(500).send("Database error.");
+    if (!user || !user.password) return res.status(401).send("Invalid credentials.");
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).send("Invalid credentials.");
+    req.session.userId = user.id;
+    console.log("✅ Session userId set:", req.session.userId);
+    res.status(200).json({ message: "Login successful" });
+  });
+});
 
-app.get('/session-check', (req, res) => {
+app.get("/logout", (req, res) => {
+  req.session = null;
+  res.redirect("/login-signup.html");
+});
+
+app.get("/session-check", (req, res) => {
   console.log("🔍 Incoming session-check...");
-  console.log("Session ID:", req.sessionID);
-  console.log("Session data:", req.session);
-
-  if (req.session && req.session.userId) {
-    res.status(200).json({ loggedIn: true, userId: req.session.userId });
+  console.log("Session:", req.session);
+  if (req.session?.userId) {
+    res.json({ loggedIn: true, userId: req.session.userId });
   } else {
-    res.status(200).json({ loggedIn: false });
+    res.json({ loggedIn: false });
   }
 });
-
-
-app.get('/me', (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Not logged in' });
-  }
-
-  db.get('SELECT id, email FROM users WHERE id = ?', [req.session.userId], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(row);
-  });
-});
-
-
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
-  });
-});
-
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Students and Check-in API!');
