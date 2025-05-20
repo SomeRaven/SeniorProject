@@ -178,12 +178,17 @@ function authRequired(req, res, next) {
 
 
 app.get('/session-check', (req, res) => {
-  if (req.session.userId) {
-    res.json({ loggedIn: true });
+  console.log("🔍 Incoming session-check...");
+  console.log("Session ID:", req.sessionID);
+  console.log("Session data:", req.session);
+
+  if (req.session && req.session.userId) {
+    res.status(200).json({ loggedIn: true, userId: req.session.userId });
   } else {
-    res.json({ loggedIn: false });
+    res.status(200).json({ loggedIn: false });
   }
 });
+
 
 app.get('/me', (req, res) => {
   if (!req.session.userId) {
