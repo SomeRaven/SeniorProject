@@ -24,9 +24,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    sameSite: 'lax',   
-    secure: false      
-  }
+    sameSite: 'none', // 'none' is required for cross-site cookies
+    secure: true      // cookies must be Secure over HTTPS
+  }  
 }));
 
 
