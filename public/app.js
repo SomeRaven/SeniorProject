@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
-                await fetch("http://localhost:8080/logout", {
+                await fetch("logout", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         console.log("The check-in data:", data);
     
-        fetch("http://localhost:8080/check-in", {
+        fetch("/check-in", {
             method: "POST",
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" },
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let allStudents = [];
     let currentSort = "id";
 
-    fetch("http://localhost:8080/students", {
+    fetch("/students", {
         credentials: "include"
       })
         .then(response => {
@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     class_ids
                 };
     
-                const response = await fetch(`http://localhost:8080/students/${studentId}`, {
+                const response = await fetch(`/students/${studentId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function deleteStudent(studentId) {
         // Delete the student from the server
-        const deleteResponse = await fetch(`http://localhost:8080/students/${studentId}`, {
+        const deleteResponse = await fetch(`/students/${studentId}`, {
             method: "DELETE",
             credentials: "include" // Include cookies in the request
 
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     async function getClassIdsForStudent(studentId) {
         try {
-            const response = await fetch('http://localhost:8080/classes');
+            const response = await fetch('/classes');
             const classes = await response.json();
     
             const studentClasses = classes.filter(cls =>
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     async function loadCurrentUser() {
         try {
-            const res = await fetch('http://localhost:8080/me', {
+            const res = await fetch('/me', {
                 method: 'GET',
                 credentials: 'include'
             });

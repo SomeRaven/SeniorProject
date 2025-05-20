@@ -11,7 +11,7 @@ async function handleLogin() {
     const password = document.getElementById('login-password').value;
     console.log(email, password);
     try {
-        const response = await fetch('http://localhost:8080/login', {
+        const response = await fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -44,7 +44,7 @@ async function handleSignup() {
     const password = document.getElementById('signup-password').value;
 
     try {
-        const response = await fetch('http://localhost:8080/register', {
+        const response = await fetch('/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',

@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
     // Fetch classes from the backend and populate the dropdown
-    fetch("http://localhost:8080/classes")
+    fetch("/classes")
         .then(response => response.json())
         .then(data => {
             const classesDropdown = document.getElementById("classes-dropdown");
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         console.log("Adding student with payload:", payload);
 
-        fetch("http://localhost:8080/students", {
+        fetch("/students", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

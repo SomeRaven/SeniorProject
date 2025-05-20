@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
-                await fetch("http://localhost:8080/logout", {
+                await fetch("/logout", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function fetchClasses() {
-        fetch("http://localhost:8080/class-students", {
+        fetch("/class-students", {
             credentials: "include"
         })
         .then(response => {
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         async function logout() {
             try {
-                await fetch("http://localhost:8080/logout", {
+                await fetch("/logout", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             try {
-                const response = await fetch(`http://localhost:8080/classes/${classId}`, {
+                const response = await fetch(`/classes/${classId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedClass),
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
     function deleteClass(classId) {
-        fetch(`http://localhost:8080/classes/${classId}`, {
+        fetch(`/classes/${classId}`, {
             method: 'DELETE',
         })
         .then(response => response.json())
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const trimmedId = studentId.trim();
         console.log("Adding student with ID:", trimmedId);
     
-        fetch("http://localhost:8080/students", {
+        fetch("/students", {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: "include" // Include cookies in the request
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
     
                 // Proceed with adding the student
-                fetch(`http://localhost:8080/class-students`, {
+                fetch(`/class-students`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     function removeStudent(classId, studentId) {
-        fetch(`http://localhost:8080/class-students`, {
+        fetch(`/class-students`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
