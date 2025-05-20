@@ -21,15 +21,17 @@ const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 
 app.use(session({
-  secret: 'secretKeyHere',
+  store: new SQLiteStore(), // ✅ Add this line
+  secret: 'yourSecretKeyHere',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    sameSite: 'none', // 'none' is required for cross-site cookies
-    secure: true      // cookies must be Secure over HTTPS
-  }  
+    sameSite: 'none',
+    secure: true
+  }
 }));
 
 
