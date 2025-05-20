@@ -1,4 +1,3 @@
-const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
@@ -26,6 +25,8 @@ app.use(express.static(publicPath));
 
 const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
+const express = require('express');
+
 
 app.set('trust proxy', 1); // ✅ Tell Express to trust proxy headers
 
