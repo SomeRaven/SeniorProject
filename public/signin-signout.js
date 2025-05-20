@@ -1,65 +1,47 @@
-// Toggle between login and signup
-function toggleAuth(form) {
-    document.getElementById('login-box').classList.add('hidden');
-    document.getElementById('signup-box').classList.add('hidden');
-    document.getElementById(form + '-box').classList.remove('hidden');
-}
+import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
-// Handle login
-async function handleLogin() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    console.log(email, password);
-    try {
+createApp({
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const error = ref('');
+
+    const login = async () => {
+      if (!email.value || !password.value) {
+        error.value = "Please enter email and password.";
+        return;
+      }
+
+      try {
         const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // 🔐 Important for setting the cookie
+          body: JSON.stringify({ email: email.value, password: password.value })
         });
 
-        if (response.ok) {
-            localStorage.setItem('userLoggedIn', 'true');
-    console.log("✅ Login successful — delaying redirect...");
-    document.cookie.split(";").forEach(c => console.log("🍪", c));
-
-    
-    setTimeout(() => {
-        window.location.href = 'check-in.html';
-    }, 2000); // wait 200ms to let cookie finalize
-        } else {
-            const data = await response.text();
-            alert(`Login failed: ${data}`);
+        if (!response.ok) {
+          const msg = await response.text();
+          error.value = msg || "Login failed.";
+          return;
         }
-    } catch (error) {
-        alert("Network error. Please try again.");
-        console.error(error);
-    }
-}
 
-// Handle signup
-async function handleSignup() {
-    const name = document.getElementById('signup-name').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
+        window.location.href = '/check-in.html';
+      } catch (err) {
+        error.value = 'Network error';
+        console.error(err);
+      }
+    };
 
-    try {
-        const response = await fetch('/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ email, password })
-        });
-
-        if (response.ok) {
-            localStorage.setItem('userLoggedIn', 'true');
-            window.location.href = '/check-in.html';
-        } else {
-            const data = await response.text();
-            alert(`Signup failed: ${data}`);
-        }
-    } catch (error) {
-        alert("Network error. Please try again.");
-        console.error(error);
-    }
-}
+    return { email, password, error, login };
+  },
+  template: `
+    <div style="max-width: 400px; margin: 100px auto; font-family: sans-serif;">
+      <h1>Login</h1>
+      <input v-model="email" type="email" placeholder="Email" style="width:100%; padding:10px; margin:10px 0;" />
+      <input v-model="password" type="password" placeholder="Password" style="width:100%; padding:10px; margin:10px 0;" />
+      <button @click="login" style="width:100%; padding:10px;">Log In</button>
+      <p v-if="error" style="color:red; margin-top:10px;">{{ error }}</p>
+    </div>
+  `
+}).mount('#app');
