@@ -24,8 +24,11 @@ const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 
 app.use(session({
-  store: new SQLiteStore(), // ✅ Add this line
-  secret: 'yourSecretKeyHere',
+  store: new SQLiteStore({
+    db: 'sessions.sqlite', // optional: default is 'sessions.sqlite'
+    dir: './tmp'            // Render allows './tmp' to persist between requests
+  }),
+  secret: 'yourSecretKeyHere', // keep this secret in production
   resave: false,
   saveUninitialized: false,
   cookie: {
