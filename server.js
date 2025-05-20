@@ -1,14 +1,12 @@
+const app = express();
+const PORT = 8080;
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const cookieParser = require("cookie-parser");
-
-const app = express();
-const PORT = 8080;
-
-import fs from "fs";
-fs.mkdirSync("./tmp", { recursive: true });
-
+const session = require("express-session");
+const SQLiteStore = require("connect-sqlite3")(session);
+const express = require('express');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -23,9 +21,6 @@ app.use(cors({
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
-const session = require("express-session");
-const SQLiteStore = require("connect-sqlite3")(session);
-const express = require('express');
 
 
 app.set('trust proxy', 1); // ✅ Tell Express to trust proxy headers
