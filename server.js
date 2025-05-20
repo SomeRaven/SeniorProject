@@ -7,6 +7,10 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 8080;
 
+import fs from "fs";
+fs.mkdirSync("./tmp", { recursive: true });
+
+
 app.use(express.json());
 app.use(cookieParser());
 const bcrypt = require('bcrypt');
@@ -20,32 +24,23 @@ app.use(cors({
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
-const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
-const fs = require('fs');
+const express = require("express");
+const session = require("express-session");
+const SQLiteStore = require("connect-sqlite3")(session);
 
-// ✅ Ensure /tmp exists (Render-safe)
-if (!fs.existsSync('/tmp')) {
-  fs.mkdirSync('/tmp');
-}
+app.set('trust proxy', 1); // ✅ Tell Express to trust proxy headers
 
 app.use(session({
-  store: new SQLiteStore({
-    dir: '/tmp',               // ✅ MUST be absolute on Render
-    db: 'sessions.sqlite',
-    concurrentDB: true         // ✅ prevents lock issues
-  }),
-  secret: 'yourSuperSecretKey', // ✅ keep secret in prod
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
-  }
+    store: new SQLiteStore({ db: "sessions.sqlite", dir: "./tmp" }),
+    secret: process.env.SESSION_SECRET || "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'none',        // ✅ Required for cross-origin cookies
+        secure: true             // ✅ Must be true on Render (HTTPS)
+    }
 }));
-
-
 
 
 const dbPath = path.join(__dirname, 'database.sqlite');
