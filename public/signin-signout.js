@@ -32,8 +32,6 @@ createApp({
         
             // 👇 Log all non-HttpOnly cookies (this won't show session cookie)
             console.log("🍪 document.cookie:", document.cookie);
-            console.log("Session after login:", req.session);
-
         
             // 👇 You can still see session cookie in browser DevTools > Application > Cookies
         
