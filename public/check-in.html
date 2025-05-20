@@ -22,7 +22,9 @@
                 const data = await res.json();
                 if (!data.loggedIn) {
                     localStorage.removeItem("userLoggedIn");
-                    window.location.href = "login-signup.html";
+                    setTimeout(() => {
+                        window.location.href = "login-signup.html";            
+                    }, 2000);
                 }
             } catch (error) {
                 console.error("Session check failed", error);
