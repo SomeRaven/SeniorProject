@@ -22,17 +22,24 @@ app.use(express.static(publicPath));
 
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
+const fs = require('fs');
+
+// ✅ Ensure /tmp exists (Render-safe)
+if (!fs.existsSync('/tmp')) {
+  fs.mkdirSync('/tmp');
+}
 
 app.use(session({
   store: new SQLiteStore({
-    dir: '/tmp',
+    dir: '/tmp',               // ✅ MUST be absolute on Render
     db: 'sessions.sqlite',
-    concurrentDB: true // 🔐 prevents locking problems
+    concurrentDB: true         // ✅ prevents lock issues
   }),
-  secret: 'yourSuperSecretKey',
+  secret: 'yourSuperSecretKey', // ✅ keep secret in prod
   resave: false,
   saveUninitialized: false,
   cookie: {
+    httpOnly: true,
     sameSite: 'none',
     secure: true
   }
