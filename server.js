@@ -24,7 +24,6 @@ app.use(cors({
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
-const express = require("express");
 const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
 
